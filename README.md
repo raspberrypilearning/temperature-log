@@ -17,7 +17,7 @@ The BCM2835 System on a Chip of the Raspberry Pi has a temperature sensor that c
 
 ## Steps
 
-1. Setting up your Raspberry Pi*, and optionally your Real Time Clock*
+1. Setting up your Raspberry Pi, *and optionally your Real Time Clock*
 1. Create the shell script that records the temperature
 1. Make your shell script run automatically at startup
 
