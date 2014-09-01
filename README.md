@@ -23,7 +23,7 @@ The BCM2835 System on a Chip of the Raspberry Pi has a temperature sensor that c
 
 ## Worksheet & included files
 
-- [The worksheet](WORKSHEET.md)
+- [The worksheet](worksheet.md)
 - (Optional) Final version of the shell script: [temperature_log.sh](temperature_log.sh)
     - Download to your Pi with `wget http://goo.gl/vV2SF5 -O temperature_log.sh --no-check-certificate`
 
