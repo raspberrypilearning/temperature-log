@@ -1,6 +1,6 @@
 # Temperature Log
 
-The BCM2835 System on a Chip of the Raspberry Pi has a temperature sensor that can be used to measure its temperature simply from the command line, giving information on how much heat the chip has generated because of its operation, and - in more extreme cases - giving some information about the temperature of the environment. This project's aim is to create a simple shell script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals and write them into log files that can be viewed later.
+The BCM2835 system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can be used to measure its temperature from the command line. It can provide information on how much heat the chip has generated during operation and also report on the temperature of the environment. This project's aim is to create a simple shell script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals, and write them into log files that can be viewed later.
 
 ![](images/bcm2835.jpg)
 
@@ -8,7 +8,7 @@ The BCM2835 System on a Chip of the Raspberry Pi has a temperature sensor that c
 
 You will need to set up your Raspberry Pi for this project. See the [Raspberry Pi Start Guide](http://www.raspberrypi.org/help/quick-start-guide/) to get you up and running.
 
-(Optional) If you would like accurate timestamps for your temperature logs without network access, you will also need to have and set up a Real Time Clock. If you are using RasClock for example, see [Afterthought Software - RasClock](http://afterthoughtsoftware.com/products/rasclock) for information on setting it up.
+(Optional) If you would like accurate timestamps for your temperature logs without network access, you will also need to set up a Real Time Clock. If you are using RasClock, for example, see [Afterthought Software - RasClock](http://afterthoughtsoftware.com/products/rasclock) for information on setting it up.
 
 ![](images/rasclock.jpg)
 
@@ -16,27 +16,27 @@ You will need to set up your Raspberry Pi for this project. See the [Raspberry P
 
 ### Introduction
 
-The chip's temperature can be read from the command line and it can also be written into a file from there, while a shell script can run a sequence of commands and with a bash interpreter it also allows the repeated execution of this procedure. We will therefore use a shell script to record the temperature into a log file at given intervals.
+The chip's temperature can be read from the command line and can also be written into a file from there. A shell script, however, can run a sequence of commands and with a bash interpreter it allows the repeated execution of this procedure. We will therefore use a shell script to record the temperature into a log file at given intervals.
 
 ### Viewing the temperature
 
-First of all, to simply view the current temperature of the BCM2835 SoC of your Raspberry Pi, you can just type the following command into the command line: `/opt/vc/bin/vcgencmd measure_temp`.
+To view the current temperature of your Raspberry Pi, you can just type the following into the command line: `/opt/vc/bin/vcgencmd measure_temp`.
 
 ![](images/viewing_temperature.png)
 
 ### Creating a shell script
 
-When writing a shell script, the first line contains information on what interpreter should be used to run the script. In this case, we will use a bash script, since that allows the usage of loops, which will be useful for our repeated measurements. To specify this, the first line of the script will be: `#!/bin/bash`.
+When writing a shell script, the first line contains information on what interpreter should be used to run the script. In this case we will use a bash script, since that allows the usage of loops which will be useful for our repeated measurements. To specify this, the first line of the script will be: `#!/bin/bash`.
 
 If you would like to edit the script directly in the command line, you can use the built-in basic text editor, nano:
 
-1. Type `nano temperature_log.sh` to create a file named `temperature_log.sh` and edit it (if the file already exists, nano will just let you edit it)
-2. After that, you can move with the cursor and simply write into the file
-3. When you are finished editing the file, press `Ctrl` + `O` to attempt to save the file
-4. Press `Enter` to actually save the file (nano allows you to optionally change the file name before this)
-5. Press `Ctrl` + `X` to exit nano
+1. Type `nano temperature_log.sh` to create a file named `temperature_log.sh` and edit it. If the file already exists, nano will just let you edit it.
+1. After that, you can move with the cursor and write into the file.
+1. When you are finished editing the file, press `Ctrl` + `O` to attempt to save the file.
+1. Press `Enter` to actually save the file (nano allows you to optionally change the file name before this).
+1. Press `Ctrl` + `X` to exit nano.
 
-*For more information on how to use the nano editor please type `man nano` or see [nano's online documentation](http://www.nano-editor.org/dist/v2.2/nano.html)*
+*For more information on how to use the nano editor, please type `man nano` or see [nano's online documentation](http://www.nano-editor.org/dist/v2.2/nano.html).*
 
 The following lines can contain a sequence of commands, so we can just write the command for viewing the temperature after the first line to test it:
 
@@ -50,7 +50,7 @@ In order to be able to actually run the script, you will need to set its permiss
 
 ### Repeatedly viewing the temperature
 
-In order to record the temperature continuously, we will need to use a loop in our shell script. There are two options, you can either create a loop that repeats indefinitely, or one that repeats a certain number of times, depending on what you would like to use it for. 
+In order to record the temperature continuously, we will need to use a loop in our shell script. There are two options: you can either create a loop that repeats indefinitely, or one that repeats a certain number of times, depending on what you would like to use it for. 
 
 The following will execute the code between `do` and `done` indefinitely:
 
@@ -61,7 +61,7 @@ do
 done
 ```
 
-While this will repeatedly execute the code between `do` and `done` 30 times:
+Whereas this will repeatedly execute the code between `do` and `done` 30 times:
 
 ```bash
 for i in {1..30}
@@ -70,7 +70,7 @@ do
 done
 ```
 
-This loop now repeats the measurement, but it does not wait in between the measurements, it just takes the measurements immediately one after the other. To take measurements only at specified intervals, we will need to wait a certain amount of time after each measurement. This can be done by inserting the line `sleep 10` just after the line for viewing the temperature, which will wait for 10 seconds each time.
+This loop now repeats the measurement, but it does not wait in between the measurements; it just takes the measurements immediately, one after the other. To take measurements only at specified intervals, we will need to wait a certain amount of time after each measurement. This can be done by inserting the line `sleep 10` just after the line for viewing the temperature; this will cause the script to wait for 10 seconds each time.
 
 #### Example script:
 
@@ -86,35 +86,29 @@ done
 
 ### Writing into a file
 
-The `echo` command allows you to simply write something into the command line, and by setting a file as its output, you can also write into text files with it. The following example first prints "test", then writes "test" into the file `test.txt` and finally shows the contents of `test.txt`:
+The `echo` command allows you to write something into the command line, and by setting a file as its output you can also write into text files with it. The following example first prints "test", then writes "test" into the file `test.txt`, and finally shows the contents of `test.txt`:
 
 ![](images/writing_to_file.png)
 
-In order to record multiple temperatures in a single file, we will need to append a new line to the file, instead of rewriting the file. This can be achieved by typing `echo test >>test.txt` for example.
+In order to record multiple temperatures in a single file, we will need to append a new line to the file instead of rewriting it. This can be achieved by typing `echo test >>test.txt`, for example.
 
 ### Creating a timestamp
 
-For creating log files, it is a good idea to take a timestamp that will be included in the log file's name, so that we can identify between the different logs easily. If you don't have a Real Time Clock or network access, the time will not be correct, but it will still maintain the log files in the correct order.
+When creating log files, it is a good idea to take a timestamp that will be included in the log file's name, so that we can identify the different logs easily. If you don't have a Real Time Clock or network access the time will not be correct, but it will still maintain the log files in the correct order.
 
-If you type the command `date +%F_%H-%M-%S`, (*where a `%F` stands for full date in a format such as `2014-07-30`, `%H` stands for the hour in the range `00..23`, `%M` stands for the minute in the range `00..59` and `%S` stands for the second in the range `00..59`*) it will give you the current date and time (as known to the Raspberry Pi) in a format that is readable, can be used as part of a filename and will also be ordered correctly. For example: `2014-07-30_10-59-56`.
+If you type the command `date +%F_%H-%M-%S`, it will give you the current date and time as known to the Raspberry Pi in a format that is readable. This can be used as part of a filename and will also be ordered correctly. For example: `2014-07-30_10-59-56`. In this command, `%F` stands for the full date in a format such as `2014-07-30`, `%H` stands for the hour in the range `00..23`, `%M` stands for the minute in the range `00..59`, and `%S` stands for the second in the range `00..59`.
 
-First, we will tell the interpreter to execute the `date` command and then use the command's output, by putting it between backticks: `` `date +%F_%H-%M-%S` ``. Then, we can create a variable which we will call `timestamp` and store the result in it: ``timestamp=`date +%F_%H-%M-%S` ``.
+First, we will tell the interpreter to execute the `date` command, and then use the command's output by putting it between backticks: `` `date +%F_%H-%M-%S` ``. Then we can create a variable which we will call `timestamp`, and store the result in it: ``timestamp=`date +%F_%H-%M-%S` ``.
 
 ### Adding the timestamp to the log
 
-At the beginning of the script, we will create the log file, initialised with a small header line.
+At the beginning of the script we will create the log file, initialised with a small header line.
 
-Type `echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt` to
+Type `echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt` to create a log file called `temperature_log_<timestamp>` in the directory `/home/pi/logs/`. *Note: we cannot reference the home directory as `~` if we choose to run the script before logging in. You will have to create the directory beforehand, for example with `mkdir ~/logs`*.
 
-* create a log file called `temperature_log_<timestamp>`
-* in the directory `/home/pi/logs/` (*we cannot reference the home directory as `~` if we choose to run the script before logging in; you will have to create the directory beforehand for example with `mkdir ~/logs`*)
+In the above command, `$(date)` returns the date in the default format and `$timestamp` returns the value of the variable called `timestamp`.
 
-Explanation:
-
-* `$(date)` returns the date in the default format
-* `$timestamp` returns the value of the variable called `timestamp`
-
-We can store the temperature inside the loop in a variable in a similar way by writing ``temp=`/opt/vc/bin/vcgencmd measure_temp` ``. After that - optionally - we can get rid of the `temp=` part of the temperature measurement's result, by typing `temp=${temp:5:16}`, which will take the variable's value starting from the 5th character for up to 16 characters. This value will then be appended to the file by writing: `echo $temp >>/home/pi/logs/temperature_log_$timestamp.txt`.
+We can use a similar technique to store the temperature inside the loop in a variable, by writing ``temp=`/opt/vc/bin/vcgencmd measure_temp` ``. After that, optionally, we can get rid of the `temp=` part of the temperature measurement's result by typing `temp=${temp:5:16}`; this will take the variable's value, starting from the 5th character, for up to 16 characters. This value can then be appended to the file by writing: `echo $temp >>/home/pi/logs/temperature_log_$timestamp.txt`.
 
 #### Example script:
 
@@ -134,7 +128,7 @@ done
 
 ## Step 2: Make your shell script run automatically at startup
 
-If you would like this script to be run automatically when you boot up your Raspberry Pi, you will need to run it from one of the scripts that get executed at startup. You have two options, you can either add it to your `~/.bashrc` and then it will run when you log in, or you can add it to `/etc/rc.local` to make it run automatically while booting, before you have to log in. ***Please be careful when editing those files (especially in the second case), as your Raspberry Pi will not boot up properly if the scripts get stuck for example!***
+If you would like this script to be run automatically when you boot up your Raspberry Pi, you will need to run it from one of the scripts that get executed at startup. You have two options: you can either add it to your `~/.bashrc` and then it will run when you log in, or you can add it to `/etc/rc.local` to make it run automatically while booting, before you have to log in. **Please be careful when editing those files (especially in the second case), as your Raspberry Pi will not boot up properly if the scripts are modified incorrectly!**
 
 ### Option 1: Run automatically when you log in: `~/.bashrc`
 
@@ -142,7 +136,7 @@ Type `nano ~/.bashrc` to open the file for editing (you can use any text editor 
 
 ![](images/editing_.bashrc.png)
 
-***Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in the loop!***
+**Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in a loop!**
 
 ### Option 2: Run automatically while booting: `/etc/rc.local`
 
@@ -150,7 +144,7 @@ Type `sudo nano /etc/rc.local` to open the file for editing (you can use any tex
 
 ![](images/editing_rc.local.png)
 
-***Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in the loop!***
+**Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in a loop!**
 
 
 ## Final shell script:
@@ -171,7 +165,7 @@ do
 done
 ```
 
-## (Extra) Final shell script for only using the Raspberry Pi for temperature measurements in intervals of 5 minutes
+## (Extra) Final shell script using the Raspberry Pi for temperature measurements in intervals of 5 minutes
 
 The following example script can be used to take a temperature measurement every 10 seconds for 5 minutes and then shut down, while also printing out information about the measurements:
 
