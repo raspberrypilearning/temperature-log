@@ -1,6 +1,0 @@
-- name: Raspberry Pi
-  img: raspberry-pi
-  url:
-- name: USB Keyboard
-  img: usb-keyboard
-  url:
