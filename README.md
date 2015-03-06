@@ -8,18 +8,7 @@ The BCM2835 system on a chip (SoC) of the Raspberry Pi has a temperature sensor 
 
 ### Hardware
 
-- 1 x Raspberry Pi
-- 1 x USB keyboard
-
-### Extras
-
-- 1 x Real Time Clock (e.g [RasClock from ModMyPi](https://www.modmypi.com/rasclock-raspberry-pi-real-time-clock-module)) *for creating logs with accurate timestamps*
-
-## Steps
-
-1. Setting up your Raspberry Pi, *and optionally your Real Time Clock*
-1. Create the shell script that records the temperature
-1. Make your shell script run automatically at startup
+- 1 x Real Time Clock (e.g [RasClock from ModMyPi](https://www.modmypi.com/rasclock-raspberry-pi-real-time-clock-module)) *for creating logs with accurate timestamps* (optional)
 
 ## Worksheet & included files
 
