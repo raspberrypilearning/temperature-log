@@ -8,7 +8,7 @@ The BCM2835 system on a chip (SoC) of the Raspberry Pi has a temperature sensor 
 
 ### Hardware
 
-- 1 x Real Time Clock (e.g [RasClock from ModMyPi](https://www.modmypi.com/rasclock-raspberry-pi-real-time-clock-module)) *for creating logs with accurate timestamps* (optional)
+For accurate timestamps in your logs, you can optionally use a [Real Time Clock](http://www.modmypi.com/raspberry-pi/breakout-boards/raspberry-pi-%28official%29/piface-shim-rtc-real-time-clock/) accessory
 
 ## Worksheet & included files
 
