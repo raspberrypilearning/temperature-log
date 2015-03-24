@@ -124,7 +124,7 @@ done
 
 If you would like this script to be run automatically when you boot up your Raspberry Pi, you will need to run it from one of the scripts that get executed at startup. You have two options: you can either add it to your `~/.bashrc` and then it will run when you log in, or you can add it to `/etc/rc.local` to make it run automatically while booting, before you have to log in. **Please be careful when editing those files (especially in the second case), as your Raspberry Pi will not boot up properly if the scripts are modified incorrectly!**
 
-### Option 1: Run automatically when you log in: `~/.bashrc`
+### Option 1: Run automatically when you log in using .bashrc
 
 Type `nano ~/.bashrc` to open the file for editing (you can use any text editor you like), and add the following line to the end of the file: `bash ~/temperature_log.sh &`. `bash` will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background.
 
@@ -132,7 +132,7 @@ Type `nano ~/.bashrc` to open the file for editing (you can use any text editor 
 
 **Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in a loop!**
 
-### Option 2: Run automatically while booting: `/etc/rc.local`
+### Option 2: Run automatically while booting using rc.local
 
 Type `sudo nano /etc/rc.local` to open the file for editing (you can use any text editor you like), and add the following line just before the `exit 0` at the end of the file: `( sleep 10; sudo bash /home/pi/temperature_log.sh ) &`. `bash` will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background. The parentheses group the `sleep` and `bash` commands together, so that execution begins with a 10 second delay.
 
