@@ -4,17 +4,11 @@ The BCM2835 system on a chip (SoC) of the Raspberry Pi has a temperature sensor 
 
 ![](images/bcm2835.jpg)
 
-## Step 0: Setting up your Raspberry Pi, and optionally your Real Time Clock
-
-You will need to set up your Raspberry Pi for this project. See the [Raspberry Pi Start Guide](http://www.raspberrypi.org/help/quick-start-guide/) to get you up and running.
-
-(Optional) If you would like accurate timestamps for your temperature logs without network access, you will also need to set up a Real Time Clock. If you are using RasClock, for example, see [Afterthought Software - RasClock](http://afterthoughtsoftware.com/products/rasclock) for information on setting it up.
+Optionally, if you would like accurate timestamps for your temperature logs without network access, you will also need to set up a Real Time Clock. If you are using RasClock, for example, see [Afterthought Software - RasClock](http://afterthoughtsoftware.com/products/rasclock) for information on setting it up.
 
 ![](images/rasclock.jpg)
 
-## Step 1: Create the shell script that records the temperature
-
-### Introduction
+## Create a shell script to record the temperature
 
 The chip's temperature can be read from the command line and can also be written into a file from there. A shell script, however, can run a sequence of commands and with a bash interpreter it allows the repeated execution of this procedure. We will therefore use a shell script to record the temperature into a log file at given intervals.
 
@@ -126,7 +120,7 @@ do
 done
 ```
 
-## Step 2: Make your shell script run automatically at startup
+## Automate your shell script at startup
 
 If you would like this script to be run automatically when you boot up your Raspberry Pi, you will need to run it from one of the scripts that get executed at startup. You have two options: you can either add it to your `~/.bashrc` and then it will run when you log in, or you can add it to `/etc/rc.local` to make it run automatically while booting, before you have to log in. **Please be careful when editing those files (especially in the second case), as your Raspberry Pi will not boot up properly if the scripts are modified incorrectly!**
 
@@ -146,8 +140,7 @@ Type `sudo nano /etc/rc.local` to open the file for editing (you can use any tex
 
 **Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in a loop!**
 
-
-## Final shell script:
+## Final shell script
 
 Your final shell script should look something like this:
 
@@ -165,7 +158,9 @@ do
 done
 ```
 
-## (Extra) Final shell script using the Raspberry Pi for temperature measurements in intervals of 5 minutes
+## What next?
+
+Try another shell script using the Raspberry Pi for temperature measurements in intervals of 5 minutes.
 
 The following example script can be used to take a temperature measurement every 10 seconds for 5 minutes and then shut down, while also printing out information about the measurements:
 
