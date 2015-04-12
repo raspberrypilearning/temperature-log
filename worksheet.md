@@ -8,9 +8,9 @@ Optionally, if you would like accurate timestamps for your temperature logs with
 
 ![](images/rasclock.jpg)
 
-## Create a shell script to record the temperature
+## Creating a shell script to record the temperature
 
-The chip's temperature can be read from the command line and can also be written into a file from there. A shell script, however, can run a sequence of commands and with a bash interpreter it allows the repeated execution of this procedure. We will therefore use a shell script to record the temperature into a log file at given intervals.
+The chip's temperature can be read from the command line and can also be written into a file from there. A shell script, however, can run a sequence of commands and with a bash interpreter, which can be used to interpret a sequence or lines of text; it enables the repeated execution of this procedure.  The temperature can be continually read and recorded.  We will therefore use a shell script to record the temperature into a log file at set intervals.
 
 ### Viewing the temperature
 
@@ -20,9 +20,9 @@ To view the current temperature of your Raspberry Pi, you can just type the foll
 
 ### Creating a shell script
 
-When writing a shell script, the first line contains information on what interpreter should be used to run the script. In this case we will use a bash script, since that allows the usage of loops which will be useful for our repeated measurements. To specify this, the first line of the script will be: `#!/bin/bash`.
+When writing a shell script, the first line contains information on what interpreter should be used to run the script. In this case we will use a bash script, since that the usage of loops which will be useful for our repeated measurements. To specify this, the first line of the script will be: `#!/bin/bash`.
 
-If you would like to edit the script directly in the command line, you can use the built-in basic text editor, nano:
+To edit the script directly in the command line, you can use the built-in text editor, nano:
 
 1. Type `nano temperature_log.sh` to create a file named `temperature_log.sh` and edit it. If the file already exists, nano will just let you edit it.
 1. After that, you can move with the cursor and write into the file.
@@ -40,7 +40,7 @@ The following lines can contain a sequence of commands, so we can just write the
 /opt/vc/bin/vcgencmd measure_temp
 ```
 
-In order to be able to actually run the script, you will need to set its permission accordingly. Type `chmod +x temperature_log.sh` to give the file permission to be executed. After that, you can run the script by typing `./temperature_log.sh`, provided that the script is in the directory you are currently in. For example, if it is in your home directory, you can just type `~/temperature_log.sh` to run it from anywhere.
+In order to be able to actually run the script, you will need to set the appropriates permission. To do this type `chmod +x temperature_log.sh` to give the file permission to be executed. After that, you can run the script by typing `./temperature_log.sh`, provided that the script is in the directory you are currently in. For example, if it is in your home directory, you can just type `~/temperature_log.sh` to run it from anywhere.
 
 ### Repeatedly viewing the temperature
 
