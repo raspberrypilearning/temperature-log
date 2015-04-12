@@ -44,9 +44,9 @@ In order to be able to actually run the script, you will need to set the appropr
 
 ### Repeatedly viewing the temperature
 
-In order to record the temperature continuously, we will need to use a loop in our shell script. There are two options: you can either create a loop that repeats indefinitely, or one that repeats a certain number of times, depending on what you would like to use it for. 
+In order to continuously record the temperature we need to use a loop in the shell script. There are two options: you can either create a loop that repeats indefinitely, or one that repeats a certain number of times, depending on what you would like to use it for. 
 
-The following will execute the code between `do` and `done` indefinitely:
+The example below will execute the code between `do` and `done` indefinitely:
 
 ```bash
 while :
@@ -55,7 +55,7 @@ do
 done
 ```
 
-Whereas this will repeatedly execute the code between `do` and `done` 30 times:
+Whereas this loop will repeatedly execute the code between `do` and `done` 30 times:
 
 ```bash
 for i in {1..30}
@@ -64,7 +64,7 @@ do
 done
 ```
 
-This loop now repeats the measurement, but it does not wait in between the measurements; it just takes the measurements immediately, one after the other. To take measurements only at specified intervals, we will need to wait a certain amount of time after each measurement. This can be done by inserting the line `sleep 10` just after the line for viewing the temperature; this will cause the script to wait for 10 seconds each time.
+This code in the loop above now repeats the measurement, however, it does not pause or wait in-between the measurements; it takes the measurements immediately, one after the other. To only take measurements at specified intervals, we will need to wait a certain amount of time after each measurement. This can be done by inserting the line `sleep 10` just after the line for viewing the temperature; this will cause the script to wait for 10 seconds before it takes another reading.
 
 #### Example script:
 
