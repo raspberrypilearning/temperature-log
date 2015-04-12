@@ -80,17 +80,17 @@ done
 
 ### Writing into a file
 
-The `echo` command allows you to write something into the command line, and by setting a file as its output you can also write into text files with it. The following example first prints "test", then writes "test" into the file `test.txt`, and finally shows the contents of `test.txt`:
+The `echo` command allows you to write content into the command line.  By setting a file as its output you can also write into text files. The following example first prints "test", then writes "test" into the file `test.txt`, finally displays the contents of `test.txt`:
 
 ![](images/writing_to_file.png)
 
-In order to record multiple temperatures in a single file, we will need to append a new line to the file instead of rewriting it. This can be achieved by typing `echo test >>test.txt`, for example.
+In order to record multiple temperatures in a single file, we will need to append a new line to the file instead of rewriting it. This can be achieved by typing `echo test >>test.txt`.
 
 ### Creating a timestamp
 
-When creating log files, it is a good idea to take a timestamp that will be included in the log file's name, so that we can identify the different logs easily. If you don't have a Real Time Clock or network access the time will not be correct, but it will still maintain the log files in the correct order.
+When creating log files, it is a good idea to take a timestamp that will be included in the log file's name.  This can then be used to easily identify the different logs. If you don't have a Real Time Clock or network access the time will not be correct however, it will still maintain the log files in the correct order.
 
-If you type the command `date +%F_%H-%M-%S`, it will give you the current date and time as known to the Raspberry Pi in a format that is readable. This can be used as part of a filename and will also be ordered correctly. For example: `2014-07-30_10-59-56`. In this command, `%F` stands for the full date in a format such as `2014-07-30`, `%H` stands for the hour in the range `00..23`, `%M` stands for the minute in the range `00..59`, and `%S` stands for the second in the range `00..59`.
+Type the command `date +%F_%H-%M-%S`, it will give you the current date and time as known to the Raspberry Pi in a format that is readable. This can be used as part of a filename and will also be correctly ordered. For example: `2014-07-30_10-59-56`. In this command, `%F` stands for the full date in a format such as `2014-07-30`, `%H` stands for the hour in the range `00..23`, `%M` stands for the minute in the range `00..59`, and `%S` stands for the second in the range `00..59`.
 
 First, we will tell the interpreter to execute the `date` command, and then use the command's output by putting it between backticks: `` `date +%F_%H-%M-%S` ``. Then we can create a variable which we will call `timestamp`, and store the result in it: ``timestamp=`date +%F_%H-%M-%S` ``.
 
@@ -122,11 +122,11 @@ done
 
 ## Automate your shell script at startup
 
-If you would like this script to be run automatically when you boot up your Raspberry Pi, you will need to run it from one of the scripts that get executed at startup. You have two options: you can either add it to your `~/.bashrc` and then it will run when you log in, or you can add it to `/etc/rc.local` to make it run automatically while booting, before you have to log in. **Please be careful when editing those files (especially in the second case), as your Raspberry Pi will not boot up properly if the scripts are modified incorrectly!**
+You may want your script to run automatically when you boot up your Raspberry Pi, this requires it to be run from one of the scripts that get executed at startup. You have two options: you can either add it to the `~/.bashrc` and then it will run when you log in, or you can add it to `/etc/rc.local` to make it run automatically while booting, before you have to log in. **Please be careful when editing those files (especially in the second case), as your Raspberry Pi will not boot up properly if the scripts are modified incorrectly!**
 
 ### Option 1: Run automatically when you log in using .bashrc
 
-Type `nano ~/.bashrc` to open the file for editing (you can use any text editor you like), and add the following line to the end of the file: `bash ~/temperature_log.sh &`. `bash` will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background.
+Type `nano ~/.bashrc` to open the file for editing (you can use any text editor you like), add the following line to the end of the file: `bash ~/temperature_log.sh &`. `bash` This will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background.
 
 ![](images/editing_.bashrc.png)
 
@@ -134,7 +134,7 @@ Type `nano ~/.bashrc` to open the file for editing (you can use any text editor 
 
 ### Option 2: Run automatically while booting using rc.local
 
-Type `sudo nano /etc/rc.local` to open the file for editing (you can use any text editor you like), and add the following line just before the `exit 0` at the end of the file: `( sleep 10; sudo bash /home/pi/temperature_log.sh ) &`. `bash` will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background. The parentheses group the `sleep` and `bash` commands together, so that execution begins with a 10 second delay.
+Type `sudo nano /etc/rc.local` to open the file for editing (you can use any text editor you like), and add the following line just before the `exit 0` at the end of the file: `( sleep 10; sudo bash /home/pi/temperature_log.sh ) &`. `bash` This will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background. The parentheses group the `sleep` and `bash` commands together, so that execution begins with a 10 second delay.
 
 ![](images/editing_rc.local.png)
 
@@ -162,7 +162,7 @@ done
 
 Try another shell script using the Raspberry Pi for temperature measurements in intervals of 5 minutes.
 
-The following example script can be used to take a temperature measurement every 10 seconds for 5 minutes and then shut down, while also printing out information about the measurements:
+The example script below can be used to take a temperature measurement every 10 seconds for 5 minutes and then shut down, while also printing out information about the measurements:
 
 ```bash
 #!/bin/bash
