@@ -8,6 +8,8 @@ Optionally, if you would like accurate timestamps for your temperature logs with
 
 ![](images/rasclock.jpg)
 
+###LO1: Know what a shell script is and create one
+
 ## Creating a shell script to record the temperature
 
 The chip's temperature can be read from the command line and can also be written into a file from there. A shell script, however, can run a sequence of commands and with a bash interpreter, which can be used to interpret a sequence or lines of text; it enables the repeated execution of this procedure.  The temperature can be continually read and recorded.  We will therefore use a shell script to record the temperature into a log file at set intervals.
