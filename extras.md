@@ -1,1 +1,1 @@
-For accurate timestamps in your logs, you can optionally use a [Real Time Clock](http://www.modmypi.com/raspberry-pi/breakout-boards/raspberry-pi-%28official%29/piface-shim-rtc-real-time-clock/) accessory
+For accurate timestamps in your logs, you might like to use a [Real Time Clock](http://www.modmypi.com/raspberry-pi/breakout-boards/raspberry-pi-%28official%29/piface-shim-rtc-real-time-clock/) accessory
