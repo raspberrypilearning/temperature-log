@@ -98,7 +98,7 @@ First, we will tell the interpreter to execute the `date` command, and then use 
 
 At the beginning of the script we will create the log file, initialised with a small header line.
 
-Type `echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt` to create a log file called `temperature_log_<timestamp>` in the directory `/home/pi/logs/`. *Note: we cannot reference the home directory as `~` if we choose to run the script before logging in. You will have to create the directory beforehand, for example with `mkdir ~/logs`*.
+Type `echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt` to create a log file called `temperature_log_<timestamp>` in the directory `/home/pi/logs/`. Note that we cannot reference the home directory as `~` if we choose to run the script before logging in. You will have to create the directory beforehand, for example with `mkdir ~/logs`.
 
 In the above command, `$(date)` returns the date in the default format and `$timestamp` returns the value of the variable called `timestamp`.
 
