@@ -66,7 +66,7 @@ done
 
 This loop now repeats the measurement, but it does not wait in between the measurements; it just takes the measurements immediately, one after the other. To take measurements only at specified intervals, we will need to wait a certain amount of time after each measurement. This can be done by inserting the line `sleep 10` just after the line for viewing the temperature; this will cause the script to wait for 10 seconds each time.
 
-#### Example script:
+Here is an example script:
 
 ```bash
 #!/bin/bash
@@ -104,7 +104,7 @@ In the above command, `$(date)` returns the date in the default format and `$tim
 
 We can use a similar technique to store the temperature inside the loop in a variable, by writing ``temp=`/opt/vc/bin/vcgencmd measure_temp` ``. After that, optionally, we can get rid of the `temp=` part of the temperature measurement's result by typing `temp=${temp:5:16}`; this will take the variable's value, starting from the 5th character, for up to 16 characters. This value can then be appended to the file by writing: `echo $temp >>/home/pi/logs/temperature_log_$timestamp.txt`.
 
-#### Example script:
+Here is an example script:
 
 ```bash
 #!/bin/bash
