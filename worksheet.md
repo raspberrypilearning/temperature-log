@@ -25,7 +25,7 @@ When writing a shell script, the first line contains information on what interpr
 If you would like to edit the script directly in the command line, you can use the built-in basic text editor, nano:
 
 1. Type `nano temperature_log.sh` to create a file named `temperature_log.sh` and edit it. If the file already exists, nano will just let you edit it.
-1. After that, you can move with the cursor and write into the file.
+1. Use the cursor to move and select where you want to write the code into the file.
 1. When you have finished editing the file, press `Ctrl` + `O` to attempt to save the file.
 1. Press `Enter` to save the file (nano allows you to change the file name before this, should you wish to).
 1. Press `Ctrl` + `X` to exit nano.
