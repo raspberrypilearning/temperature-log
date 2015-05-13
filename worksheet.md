@@ -4,7 +4,7 @@ The BCM2835 system on a chip (SoC) of the Raspberry Pi has a temperature sensor 
 
 ![](images/bcm2835.jpg)
 
-Optionally, if you would like accurate timestamps for your temperature logs without network access, you will also need to set up a Real Time Clock. If you are using RasClock, for example, see [Afterthought Software - RasClock](http://afterthoughtsoftware.com/products/rasclock) for information on setting it up.
+If you would like accurate timestamps for your temperature logs without network access, you will also need to set up a Real Time Clock. If you are using RasClock, for example, see [Afterthought Software - RasClock](http://afterthoughtsoftware.com/products/rasclock) for information on setting it up.
 
 ![](images/rasclock.jpg)
 
