@@ -30,7 +30,7 @@ If you would like to edit the script directly in the command line, you can use t
 1. Press `Enter` to actually save the file (nano allows you to optionally change the file name before this).
 1. Press `Ctrl` + `X` to exit nano.
 
-*For more information on how to use the nano editor, please type `man nano` or see [nano's online documentation](http://www.nano-editor.org/dist/v2.2/nano.html).*
+For more information on how to use the nano editor, please type `man nano` or see [nano's online documentation](http://www.nano-editor.org/dist/v2.2/nano.html).
 
 The following lines can contain a sequence of commands, so we can just write the command for viewing the temperature after the first line to test it:
 
