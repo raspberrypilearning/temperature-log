@@ -361,7 +361,7 @@ while True:
     cat cpu_temp.csv
     ```
 
-to see the contents of the csv file.
+    to see the contents of the csv file.
 
 1. If you want to see a graph, then just uncomment the `graph(temp)` line using IDLE and run the file.
 
