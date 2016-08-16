@@ -1,5 +1,5 @@
 # Temperature Log
-n
+
 The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can be used to measure its temperature from the command line. It can provide information on how much heat the chip has generated during operation and also report on the temperature of the environment. This project's aim is to create a simple script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals, and write them into log files that can be viewed later.
 
 ![](images/bcm2835.jpg)
@@ -25,7 +25,7 @@ temp=48.3'C
 
 ### Creating a python script
 
-Any command you use in the teminal can be called from within a python script by using the `os` library.
+Any command you use in the terminal can be called from within a python script by using the `subprocess` module.
 
 1. Open up a new Python3 shell by going to `Menu`>`Programming`>`Python 3 (IDLE)`.
 1. Now create a new Python script by clicking on `File` > `New File`.
@@ -35,13 +35,13 @@ Any command you use in the teminal can be called from within a python script by 
 from subprocess import check_output
 ```
 
-1. You can now use `check_output` to run the command you typed into the termial earlier. You type feed in the command as a list, with the 0th item being the command to run, and subsequent items being the arguments passed to the command.
+1. You can now use `check_output` to run the command you typed into the terminal earlier. The `checkout_put` method takes a list as input, with the 0th item being the command to run, and other items being the arguments passed to the command.
 
 ``` python
 temp = check_output(["vcgencmd","measure_temp"])
 ```
 
-1. Save and run the file (`ctrl+s` + `F5`). Then switch over into the python shell and type `temp` to check the variable's value. You should see something that looks like this:
+1. Save and run the file (`ctrl+s` + `F5`), calling the file `temp_monitor.py` when prompted. Then switch over into the python shell and type `temp` to check the variable's value. You should see something that looks like this:
 
 ``` python
 >>> temp
@@ -49,9 +49,9 @@ b"temp=48.3'C\n"
 >>> 
 ```
 
-1. So you can see that the temperature is, in this case, `48.3` celcius. But what's that `b` doing at the start of the string?
+1. So you can see that the temperature is, in this case, `48.3` Celsius. But what's that `b` doing at the start of the string?
 
-1. The `check_output` command returns a datatype called a byte string. This is where each character is represented by a value between 0 and 255 in a large array. To see this as a string, it needs to be decoded. You can decode the `out` variable with an extra line of python.
+1. The `check_output` command returns a data-type called a byte string. This is where each character is represented by a value between 0 and 255 in a large array. To see this as a string, it needs to be decoded. You can decode the `out` variable with an extra line of python.
 
 ``` python
 temp = temp.decode("UTF-8")
@@ -68,7 +68,7 @@ temp = temp.decode("UTF-8")
 ### Finding floats with regex
 1. Although you now have a string, it would be better to get the actual value out of the string. It's a decimal number, which is called a float in Computer Science. To do this you can use a handy concept called **regular expressions**. Regular expressions, or **regex** look for patterns in strings. In this case we want to find a number, followed by a decimal point, followed by an additional number.
 
-1. First you need to import the `findall` method from the `re` library. Add this line beneath your `subprocess import`
+1. First you need to import the `findall` method from the `re` library. Add this line beneath your `subprocess` import.
 
 ``` python
 from re import findall
@@ -88,7 +88,7 @@ temp = findall("\d", temp)
 >>> 
 ```
 
-1. You'll notice that the numbers have been placed in a list. Unfortunately the `4` and the `8` have been split. By adding a `+` to the d, you can search for numbers that are consecutive. Edit the line so it's like this:
+1. You'll notice that the numbers have been placed in a list. Unfortunately the `4` and the `8` have been split. You can resolve this by adding a `+` to the d. This will then search for numbers that are consecutive. Edit the line so it's like this:
 
 ``` python
 temp = findall("\d+", temp)
@@ -102,7 +102,7 @@ temp = findall("\d+", temp)
 >>> 
 ```
 
-1. The number has still been split around the decimal point though. The line can be edited to include a search for the deimal point though.
+1. The number has still been split around the decimal point though. The line can be edited to include a search for the decimal point though.
 
 ``` python
 temp = findall("\d+\.", temp)
@@ -167,7 +167,7 @@ temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
 temp = float(findall("\d+\.\d+",temp)[0])
 ```
 
-1. But you'll definately want to place it all in a function:
+1. But you'll definitely want to place it all in a function:
 
 ``` python
 from subprocess import check_output
@@ -179,7 +179,7 @@ def get_temp():
     return(temp)
 ```
 
-1. So now in the shell you can call the function:
+1. So now in the shell, after you've run the file, you can call the function:
 
 ``` python
 >>> get_temp()
@@ -189,7 +189,7 @@ def get_temp():
 
 ## Writing the data to a CSV file.
 
-Although it's nice that you now have a function to find out the CPU temperature, it would be useful if that data could be stored somewhere. A CSV (comma seperated values) as ideal for this, as it can be used by applications like Excel and Libre Office.
+Although it's nice that you now have a function to find out the CPU temperature, it would be useful if that data could be stored somewhere. A CSV file (comma separated values) is ideal for this, as it can be used by applications like Excel and LibreOffice.
 
 1. You'll want to log the date and time, while getting the CPU temperatures, so you'll some extra libraries for this. Add this to your imports.
 
@@ -197,7 +197,7 @@ Although it's nice that you now have a function to find out the CPU temperature,
 from time import sleep, strftime, time
 ```
 
-These extra methos let you pause your program (`sleep`), get todays date as a string (`strftime`) and get the exact time in what is known as **UNIX Time** (`time`)
+These extra methods let you pause your program (`sleep`), get today's date as a string (`strftime`) and get the exact time in what is known as [**UNIX Time**](https://en.wikipedia.org/wiki/Unix_time) (`time`)
 
 
 1. To write to a file, you first need to create it. To the end of your file, add the following line:
@@ -223,7 +223,7 @@ with open("cpu_temp.csv", "a") as log:
         temp = get_temp()
 ```
 
-1. Now you want to write both the current data and time, plus the temperature to the csv file.
+1. Now you want to write both the current date and time, plus the temperature, to the csv file.
 
 ``` python
 with open("cpu_temp.csv", "a") as log:
@@ -234,9 +234,9 @@ with open("cpu_temp.csv", "a") as log:
 
 1. That line's a little complicated, so let's break it down a bit:
   - `log.write()` will write what ever string is in the brackets to the csv file.
-  - `"{0},{1}\n"` is a string containing two placeholders seperated by a comma, and ending in a newline.
+  - `"{0},{1}\n"` is a string containing two placeholders separated by a comma, and ending in a newline.
   - `strftime("%Y-%m-%d %H:%M:%S")` is inserted into the first placeholder. It's the current data and time as a string.
-  - `str(temp)` is the CPU temperature converted to a string.
+  - `str(temp)` is the CPU temperature converted to a string, that is written into the second placeholder, after the comma.
 
 1. Lastly you can add a single line to the end of your file to pause the script between writes. Here it's pausing for one second, but you can use any interval that is suitable for you.
 
@@ -265,15 +265,15 @@ with open("cpu_temp.csv", "a") as log:
 
 ## Live graphing the data
 
-You can produce a graph of CPU temperatures, that will update as it's recorded. For this you'll need the `matplotlib` library. The instructions for installing this are [here]()
+You can produce a graph of CPU temperatures, that will update as it's recorded. For this you'll need the `matplotlib` library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md)
 
-1. First of all import the `matplotlib` library where your other imports are.
+1. First of all, import the `matplotlib` library where your other imports are.
 
 ``` python
 import matplotlib.pyplot as plt
 ```
 
-1. The next three lines can go before you `get_temp()` definition. They'll tell matplotlib that you're intending on doing interactive plotting, and also create the two lists that will hold the data to be plotted.
+1. The next three lines can go before your `get_temp()` definition. They'll tell matplotlib that you're intending on doing interactive plotting, and also create the two lists that will hold the data to be plotted.
 
 ``` python
 plt.ion()
@@ -302,7 +302,7 @@ plt.plot(x,y)
 plt.draw()
 ```
 
-1. Run your program and you should see the graph being interactivly drawn. Open up some programs such as Minecraft or Mathematica and watch the CPU temperature increase.
+1. Run your program and you should see the graph being interactively drawn. Open up some programs such as Minecraft or Mathematica and watch the CPU temperature increase.
 
 ## Automating the script
 
@@ -342,7 +342,7 @@ while True:
     sleep(1)
 ```
 
-1. Automating scripts is simple with `crontab`. Open up a terminal (`ctrl`+`alt`+`t`).
+1. Automating scripts is simple with `crontab`. This is basically a file where commands can be placed that will run at certain times or after certain events.  Open up a terminal (`ctrl`+`alt`+`t`).
 1. Now to edit the crontab you just type:
 
 ``` bash
@@ -354,7 +354,7 @@ crontab -e
 @reboot python3 /home/pi/temp_monitor.py
 ```
 
-This assumes you script is called `temp_monitor.py` and is saved in your home directory.
+This assumes you script is called `temp_monitor.py` and it is saved in your home directory.
 
 1. Now reboot your Raspberry Pi. Give it a little time to run and then in in a terminal type:
 
@@ -368,6 +368,6 @@ to see the contents of the csv file.
 
 ## What next?
 
-- If you want to play around more with matplotlib, you can have a look at the Visualising Sorting with Python lessons, on the Raspberry Pi website.
-- Why not have a look at the Getting Started with the Twitter API resource, and have your Raspberry Pi tweet you when the CPU temperature gets too high?
+- If you want to play around more with matplotlib, you can have a look at the [Visualising Sorting with Python](https://www.raspberrypi.org/learning/visualising-sorting-with-python/) lessons, on the Raspberry Pi website.
+- Why not have a look at the [Getting Started with the Twitter API](https://www.raspberrypi.org/learning/getting-started-with-the-twitter-api/) resource, and have your Raspberry Pi tweet you when the CPU temperature gets too high?
 
