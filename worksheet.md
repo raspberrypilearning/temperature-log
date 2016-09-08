@@ -1,185 +1,375 @@
 # Temperature Log
 
-The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can be used to measure its temperature from the command line. It can provide information on how much heat the chip has generated during operation and also report on the temperature of the environment. This project's aim is to create a simple shell script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals, and write them into log files that can be viewed later.
+The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can be used to measure its temperature from the command line. It can provide information on how much heat the chip has generated during operation, and also report on the temperature of the environment. This project's aim is to create a simple script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals, and write them into log files that can be viewed later.
 
 ![](images/bcm2835.jpg)
 
-If you would like accurate timestamps for your temperature logs without network access, you will also need to set up a Real Time Clock. If you are using RasClock, for example, see [Afterthought Software - RasClock](http://afterthoughtsoftware.com/products/rasclock) for information on setting it up.
+## Viewing the temperature
 
-![](images/rasclock.jpg)
-
-## Create a shell script to record the temperature
-
-The chip's temperature can be read from the command line and can also be written into a file from there. A shell script, however, can run a sequence of commands and with a bash interpreter it allows the repeated execution of this procedure. We will therefore use a shell script to record the temperature into a log file at given intervals.
-
-### Viewing the temperature
-
-To view the current temperature of your Raspberry Pi, you can just type the following into the command line: `/opt/vc/bin/vcgencmd measure_temp`.
-
-![](images/viewing_temperature.png)
-
-### Creating a shell script
-
-When writing a shell script, the first line contains information on what interpreter should be used to run the script. In this case we will use a bash script, since that allows the usage of loops which will be useful for our repeated measurements. To specify this, the first line of the script will be: `#!/bin/bash`.
-
-If you would like to edit the script directly in the command line, you can use the built-in basic text editor, nano:
-
-1. Type `nano temperature_log.sh` to create a file named `temperature_log.sh` and edit it. If the file already exists, nano will just let you edit it.
-1. Use the cursor to move and select where you want to write the code into the file.
-1. When you have finished editing the file, press `Ctrl` + `O` to attempt to save the file.
-1. Press `Enter` to save the file (nano allows you to change the file name before this, should you wish to).
-1. Press `Ctrl` + `X` to exit nano.
-
-For more information on how to use the nano editor, please type `man nano` or see [nano's online documentation](http://www.nano-editor.org/dist/v2.2/nano.html).
-
-The following lines can contain a sequence of commands, so we can just write the command for viewing the temperature after the first line to test it:
+There's a simple terminal command that can be used to find the temperature of the CPU.
+To view the current temperature of your Raspberry Pi, open up a terminal (`Ctrl`+`Alt`+`T`) and type:
 
 ```bash
-#!/bin/bash
-
-/opt/vc/bin/vcgencmd measure_temp
+vcgencmd measure_temp
 ```
 
-In order to be able to actually run the script, you will need to set its permission accordingly. Type `chmod +x temperature_log.sh` to give the file permission to be executed. After that, you can run the script by typing `./temperature_log.sh`, provided that the script is in the directory you are currently in. For example, if it is in your home directory, you can just type `~/temperature_log.sh` to run it from anywhere.
-
-### Repeatedly viewing the temperature
-
-In order to record the temperature continuously, we will need to use a loop in our shell script. There are two options: you can either create a loop that repeats indefinitely, or one that repeats a certain number of times, depending on what you would like to use it for. 
-
-The following will execute the code between `do` and `done` indefinitely:
+You should see something like the following output:
 
 ```bash
-while :
-do
-	/opt/vc/bin/vcgencmd measure_temp
-done
+pi@raspberrypi:~ $ vcgencmd measure_temp
+temp=48.3'C
 ```
 
-Whereas this will repeatedly execute the code between `do` and `done` 30 times:
+## Creating a Python script
 
-```bash
-for i in {1..30}
-do
-	/opt/vc/bin/vcgencmd measure_temp
-done
+Any command you use in the terminal can be called from within a Python script by using the `subprocess` module.
+
+1. Open a new Python 3 shell by going to `Menu` > `Programming` > `Python 3 (IDLE)`.
+1. Now create a new Python script by clicking on `File` > `New File`.
+1. If you want to run a shell command using Python, the best way to do it is using the `subprocess` module, so your first line should import the `check_output` method from this library:
+
+    ```python
+    from subprocess import check_output
+    ```
+
+1. You can now use `check_output` to run the command you typed into the terminal earlier. The `check_output` method takes a list as input, with the 0th item being the command to run, and other items being the arguments passed to the command:
+
+    ```python
+    temp = check_output(["vcgencmd", "measure_temp"])
+    ```
+
+1. Save and run the file (`Ctrl`+`S` + `F5`), calling the file `temp_monitor.py` when prompted. Then switch to the Python shell and type `temp` to check the variable's value. You should see something that looks like this:
+
+    ```python
+    >>> temp
+    b"temp=48.3'C\n"
+    >>> 
+    ```
+
+So you can see that the temperature is, in this case, `48.3` degrees Celsius. But what's that `b` doing at the start of the string?
+
+1. The `check_output` command returns a data type called a byte string. This is where each character is represented by a value between 0 and 255 in a large array. To see this as a string, it needs to be decoded. You can decode the `out` variable with an extra line of Python:
+
+    ```python
+    temp = temp.decode("UTF-8")
+    ```
+
+1. Now when you query `temp` in the Python shell, you should see something like this:
+
+```python
+>>> temp
+"temp=48.3'C\n"
+>>> 
 ```
 
-This loop now repeats the measurement, but it does not wait in between the measurements; it just takes the measurements immediately, one after the other. To take measurements only at specified intervals, we will need to wait a certain amount of time after each measurement. This can be done by inserting the line `sleep 10` just after the line for viewing the temperature; this will cause the script to wait for 10 seconds each time.
+## Finding floats with regex
 
-Here is an example script:
+Although you now have a string, it would be better to get the actual value out of the string. It's a decimal number, which is called a float in computer science. To get the float, you can use a handy concept called **regular expressions**. A regular expression, or **regex**, looks for patterns in strings. In this case we want to find a number, followed by a decimal point, followed by an additional number.
 
-```bash
-#!/bin/bash
+1. First, you need to import the `findall` method from the `re` library. Add this line beneath your `subprocess` import:
 
-while :
-do
-	/opt/vc/bin/vcgencmd measure_temp
-	sleep 10
-done
+    ```python
+    from re import findall
+    ```
+
+1. You can start by just looking for a number. In regex, the characters `\d` searches for a number:
+
+    ```python
+    temp = findall("\d", temp)
+    ```
+
+1. Querying `temp` in the shell will now provide something like this:
+
+    ```python
+    >>> temp
+    ['4', '8', '3']
+    >>> 
+    ```
+
+1. You'll notice that the numbers have been placed in a list. Unfortunately, the `4` and the `8` have been split. You can resolve this by adding a `+` to the `d`; this regex will then search for numbers that are consecutive. Edit the line so it looks like this:
+
+    ```python
+    temp = findall("\d+", temp)
+    ```
+
+This should give you something like this:
+
+    ```python
+    >>> temp
+    ['48', '3']
+    >>> 
+    ```
+
+1. The number has still been split around the decimal point, though. The line can be edited to include a search for the decimal point, however:
+
+    ```python
+    temp = findall("\d+\.", temp)
+    ```
+
+1. Now querying `temp` in the shell gives this:
+
+    ```python
+    >>> temp
+    ['48.']
+    >>> 
+    ```
+
+1. The number after the decimal place is missing. One more change will give you the actual number:
+
+    ```python
+    temp = findall("\d+\.\d+", temp)
+    ```
+    
+Now you have this output:
+
+```python
+>>> temp
+['48.3']
+>>> 
 ```
 
-### Writing into a file
+## Getting the actual float
 
-The `echo` command allows you to write something into the command line, and by setting a file as its output you can also write into text files with it. The following example first prints "test", then writes "test" into the file `test.txt`, and finally shows the contents of `test.txt`:
+You still have a problem: you don't actually have the float yet. What you have is something like `['48.3']`, which is actually a string inside a list.
 
-![](images/writing_to_file.png)
+1. As the list has only a single element, you can get the 0th element easily by adding another line:
 
-In order to record multiple temperatures in a single file, we will need to append a new line to the file instead of rewriting it. This can be achieved by typing `echo test >>test.txt`, for example.
+    ```python
+    temp = temp[0]
+    ```
 
-### Creating a timestamp
+1. Then, you just need to convert the string to a float:
 
-When creating log files, it is a good idea to take a timestamp that will be included in the log file's name, so that we can identify the different logs easily. If you don't have a Real Time Clock or network access the time will not be correct, but it will still maintain the log files in the correct order.
+    ```python
+    temp = float(temp)
+    ```
 
-If you type the command `date +%F_%H-%M-%S`, it will give you the current date and time as known to the Raspberry Pi in a format that is readable. This can be used as part of a filename and will also be ordered correctly. For example: `2014-07-30_10-59-56`. In this command, `%F` stands for the full date in a format such as `2014-07-30`, `%H` stands for the hour in the range `00..23`, `%M` stands for the minute in the range `00..59`, and `%S` stands for the second in the range `00..59`.
+1. Your entire script should now look like this:
 
-First, we will tell the interpreter to execute the `date` command, and then use the command's output by putting it between backticks: `` `date +%F_%H-%M-%S` ``. Then we can create a variable which we will call `timestamp`, and store the result in it: ``timestamp=`date +%F_%H-%M-%S` ``.
+    ```python
+    from subprocess import check_output
+    from re import findall
 
-### Adding the timestamp to the log
+    temp = check_output(["vcgencmd", "measure_temp"])
+    temp = temp.decode("UTF-8")
+    temp = findall("\d+\.\d+",temp)
+    temp = temp[0]
+    temp = float(temp)
+    ```
 
-At the beginning of the script we will create the log file, initialised with a small header line.
+1. You could condense this down into fewer lines, if you like:
 
-Type `echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt` to create a log file called `temperature_log_<timestamp>` in the directory `/home/pi/logs/`. Note that we cannot reference the home directory as `~` if we choose to run the script before logging in. You will have to create the directory beforehand, for example with `mkdir ~/logs`.
+    ```python
+    from subprocess import check_output
+    from re import findall
 
-In the above command, `$(date)` returns the date in the default format and `$timestamp` returns the value of the variable called `timestamp`.
+    temp = check_output(["vcgencmd", "measure_temp"]).decode("UTF-8")
+    temp = float(findall("\d+\.\d+",temp)[0])
+    ```
 
-We can use a similar technique to store the temperature inside the loop in a variable, by writing ``temp=`/opt/vc/bin/vcgencmd measure_temp` ``. After that, optionally, we can get rid of the `temp=` part of the temperature measurement's result by typing `temp=${temp:5:16}`; this will take the variable's value, starting from the 5th character, for up to 16 characters. This value can then be appended to the file by writing: `echo $temp >>/home/pi/logs/temperature_log_$timestamp.txt`.
+1. However, you'll definitely want to place it all in a function:
 
-Here is an example script:
+    ``` python
+    from subprocess import check_output
+    from re import findall
 
-```bash
-#!/bin/bash
+    def get_temp():
+        temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
+        temp = float(findall("\d+\.\d+",temp)[0])
+        return(temp)
+    ```
 
-timestamp=`date +%F_%H-%M-%S`
-echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt
-while :
-do
-	temp=`/opt/vc/bin/vcgencmd measure_temp`
-	temp=${temp:5:16}
-	echo $temp >>/home/pi/logs/temperature_log_$timestamp.txt
-	sleep 10
-done
+1. Now in the shell, after you've run the file, you can call the function:
+
+    ```python
+    >>> get_temp()
+    47.8
+    >>> 
+    ```
+
+## Writing the data to a CSV file
+
+Although it's nice that you now have a function to find out the CPU temperature, it would be useful if that data could be stored somewhere. A CSV file (comma-separated values) is ideal for this, as it can be used by applications like Excel and LibreOffice.
+
+1. You'll want to log the date and time while getting the CPU temperatures, so you'll need some extra libraries for this. Add this to your imports:
+
+    ```python
+    from time import sleep, strftime, time
+    ```
+
+    These extra methods let you pause your program (`sleep`), get today's date as a string (`strftime`), and get the exact time in what's known as [**UNIX time**](https://en.wikipedia.org/wiki/Unix_time) (`time`).
+
+1. To write to a file, you first need to create it. At the end of your file, add the following line:
+
+    ```python
+    with open("cpu_temp.csv", "a") as log:
+    ```
+
+    This creates a new file called `cpu_temp.csv` and opens it with the name `log`. It also opens it in *append* mode, so that lines are only written to the end of the file.
+
+1. Now, you'll need to start an infinite loop that will run until you kill the program with `Ctrl`+`C`:
+
+    ```python
+    with open("cpu_temp.csv", "a") as log:
+        while True:
+    ```
+
+1. Inside the loop, you can use your `get_temp` function to get the temperature:
+
+    ```python
+    with open("cpu_temp.csv", "a") as log:
+        while True:
+            temp = get_temp()
+    ```
+
+1. Now you want to write both the current date and time, plus the temperature, to the CSV file:
+
+    ```python
+    with open("cpu_temp.csv", "a") as log:
+        while True:
+            temp = get_temp()
+            log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
+    ```
+
+1. That line's a little complicated, so let's break it down a bit:
+
+  - `log.write()` will write whatever string is in the brackets to the CSV file.
+  - `"{0},{1}\n"` is a string containing two placeholders separated by a comma, and ending in a newline.
+  - `strftime("%Y-%m-%d %H:%M:%S")` is inserted into the first placeholder. It's the current date and time as a string.
+  - `str(temp)` is the CPU temperature converted to a string, that's written into the second placeholder after the comma.
+
+1. Lastly, you can add a single line to the end of your file to pause the script between writes. Here it's pausing for one second, but you can use any interval that you want:
+
+    ```python
+    sleep(1)
+    ```
+
+1. The entire script should now look like this:
+
+    ```python
+    from subprocess import check_output
+    from re import findall
+    from time import sleep, strftime, time
+
+    def get_temp():
+        temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
+        temp = float(findall("\d+\.\d+",temp)[0])
+        return(temp)
+
+    with open("cpu_temp.csv", "a") as log:
+        while True:
+            temp = get_temp()
+            log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
+            sleep(1)
+    ```
+
+## Live graphing the data
+
+You can produce a graph of CPU temperatures that will update as it's recorded. For this you'll need the `matplotlib` library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md).
+
+1. First of all, import the `matplotlib` library where your other imports are:
+
+    ```python
+    import matplotlib.pyplot as plt
+    ```
+
+1. The next three lines can go before your `get_temp()` definition. They tell `matplotlib` that you'll be doing interactive plotting, and also create the two lists that will hold the data to be plotted:
+
+    ```python
+    plt.ion()
+    x = []
+    y = []
+    ```
+
+1. The next lines all go into your `while True` loop, before the CSV is written, but after the `temp = get_temp()` line. Firstly, you add the current temperature to the end of the `y` list, and the time to the end of the `x` list:
+
+    ```python
+    y.append(temp)
+    x.append(time())
+    ```
+
+1. Next, the plot needs to be cleared, and then the points and lines calculated:
+
+    ```python
+    plt.clf()
+    plt.scatter(x,y)
+    plt.plot(x,y)
+    ```
+
+1. Lastly, the plot can be drawn:
+
+    ```python
+    plt.draw()
+    ```
+
+1. Run your program and you should see the graph being interactively drawn. Open up some programs, such as Minecraft or Mathematica, and watch the CPU temperature increase.
+
+## Automating the script
+
+It might be useful to have this script running when the Raspberry Pi starts up. To do this, it's best to clean up the script a little, so that you can easily comment out the lines that draw the graph. Below is the same script tidied into functions, and with the graph-drawing line commented out:
+
+```python
+from subprocess import check_output
+from re import findall
+from time import sleep, strftime, time
+import matplotlib.pyplot as plt
+
+plt.ion()
+x = []
+y = []
+
+def get_temp():
+    temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
+    temp = float(findall("\d+\.\d+",temp)[0])
+    return(temp)
+
+def write_temp(temp):
+    with open("cpu_temp.csv", "a") as log:
+        log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
+
+def graph(temp):
+    y.append(temp)
+    x.append(time())
+    plt.clf()
+    plt.scatter(x,y)
+    plt.plot(x,y)
+    plt.draw()    
+
+while True:
+    temp = get_temp()
+    write_temp(temp)
+#    graph(temp)
+    sleep(1)
+
 ```
 
-## Automate your shell script at startup
+1. Automating scripts is simple with `crontab`. This is basically a file where commands can be placed that will run at certain times or after certain events. To begin, open up a terminal (`Ctrl`+`Alt`+`T`).
 
-If you would like this script to be run automatically when you boot up your Raspberry Pi, you will need to run it from one of the scripts that get executed at startup. You have two options: you can either add it to your `~/.bashrc` and then it will run when you log in, or you can add it to `/etc/rc.local` to make it run automatically while booting, before you have to log in. **Please be careful when editing those files (especially in the second case), as your Raspberry Pi will not boot up properly if the scripts are modified incorrectly!**
+1. Now to edit the crontab you just type:
 
-### Option 1: Run automatically when you log in using .bashrc
+    ```bash
+    crontab -e
+    ```
+1. Scroll to the bottom of the file and add this single line:
 
-Type `nano ~/.bashrc` to open the file for editing (you can use any text editor you like), and add the following line to the end of the file: `bash ~/temperature_log.sh &`. `bash` will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background.
+    ```bash
+    @reboot python3 /home/pi/temp_monitor.py
+    ```
 
-![](images/editing_.bashrc.png)
+    This assumes your script is called `temp_monitor.py` and it's saved in your home directory.
 
-**Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in a loop!**
+1. Now reboot your Raspberry Pi. Give it a little time to run and then in in a terminal type:
 
-### Option 2: Run automatically while booting using rc.local
+    ```bash
+    cat cpu_temp.csv
+    ```
 
-Type `sudo nano /etc/rc.local` to open the file for editing (you can use any text editor you like), and add the following line just before the `exit 0` at the end of the file: `( sleep 10; sudo bash /home/pi/temperature_log.sh ) &`. `bash` will execute the shell script provided as its argument and the `&` character at the end ensures that the script will run in the background. The parentheses group the `sleep` and `bash` commands together, so that execution begins with a 10 second delay.
+    to see the contents of the CSV file.
 
-![](images/editing_rc.local.png)
-
-**Make sure not to miss the `&` character at the end, otherwise the script will not run in the background and will make the booting process get stuck in a loop!**
-
-## Final shell script
-
-Your final shell script should look something like this:
-
-```bash
-#!/bin/bash
-
-timestamp=`date +%F_%H-%M-%S`
-echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt
-while :
-do
-	temp=`/opt/vc/bin/vcgencmd measure_temp`
-	temp=${temp:5:16}
-	echo $temp >>/home/pi/logs/temperature_log_$timestamp.txt
-	sleep 10
-done
-```
+1. If you want to see a graph, then just uncomment the `graph(temp)` line using IDLE and run the file.
 
 ## What next?
 
-Try another shell script using the Raspberry Pi for temperature measurements in intervals of 5 minutes.
+- If you want to play around more with `matplotlib`, you can have a look at the [Visualising Sorting with Python](https://www.raspberrypi.org/learning/visualising-sorting-with-python/) lessons on the Raspberry Pi website.
+- Why not have a look at the [Getting Started with the Twitter API](https://www.raspberrypi.org/learning/getting-started-with-the-twitter-api/) resource, and have your Raspberry Pi tweet you when the CPU temperature gets too high?
 
-The following example script can be used to take a temperature measurement every 10 seconds for 5 minutes and then shut down, while also printing out information about the measurements:
-
-```bash
-#!/bin/bash
-
-echo "Starting to record the temperature" 
-timestamp=`date +%F_%H-%M-%S`
-echo "Writing into /home/pi/logs/temperature_log_$timestamp.txt" 
-echo "Temperature Log - $(date)" >/home/pi/logs/temperature_log_$timestamp.txt
-for i in {1..30}
-do
-	temp=`/opt/vc/bin/vcgencmd measure_temp`
-	temp=${temp:5:16}
-	echo $temp >>/home/pi/logs/temperature_log_$timestamp.txt
-	echo "Recorded temperature #$i:"
-	tail -1 /home/pi/logs/temperature_log_$timestamp.txt
-	sleep 10
-done
-echo "Finished recording the temperature, shutting down"
-sudo shutdown -h now
-```
