@@ -120,13 +120,13 @@ This should give you something like this:
     temp = findall("\d+\.\d+", temp)
     ```
     
-Now you have this output:
+    Now you have this output:
 
-```python
->>> temp
-['48.3']
->>> 
-```
+    ```python
+    >>> temp
+    ['48.3']
+    >>> 
+    ```
 
 ## Getting the actual float
 
