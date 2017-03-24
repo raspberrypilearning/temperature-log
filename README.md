@@ -13,7 +13,7 @@ For accurate timestamps in your logs, you can optionally use a [Real Time Clock]
 ## Worksheet & included files
 
 - [The worksheet](worksheet.md)
-- (Optional) Final version of the shell script: [temp_monitor.sh](code/temperature_log.sh)
+- (Optional) Final version of a shell script: [temp_monitor.sh](code/temperature_log.sh)
     - Download to your Pi with `wget http://goo.gl/vV2SF5 -O temperature_log.sh --no-check-certificate`
 
 ## Licence
