@@ -4,192 +4,32 @@ The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can
 
 ![](images/bcm2835.jpg)
 
-## Viewing the temperature
-
-There's a simple terminal command that can be used to find the temperature of the CPU.
-To view the current temperature of your Raspberry Pi, open up a terminal (`Ctrl`+`Alt`+`T`) and type:
-
-```bash
-vcgencmd measure_temp
-```
-
-You should see something like the following output:
-
-```bash
-pi@raspberrypi:~ $ vcgencmd measure_temp
-temp=48.3'C
-```
-
-## Creating a Python script
-
-Any command you use in the terminal can be called from within a Python script by using the `subprocess` module.
+## Creating a Python script to monitor temperature
 
 1. Open a new Python 3 shell by going to `Menu` > `Programming` > `Python 3 (IDLE)`.
+
 1. Now create a new Python script by clicking on `File` > `New File`.
-1. If you want to run a shell command using Python, the best way to do it is using the `subprocess` module, so your first line should import the `check_output` method from this library:
 
-    ```python
-    from subprocess import check_output
-    ```
+1. You can use the gpiozero module to find the CPU temperature. First you'll need to import the `CPUTemperature` class
 
-1. You can now use `check_output` to run the command you typed into the terminal earlier. The `check_output` method takes a list as input, with the 0th item being the command to run, and other items being the arguments passed to the command:
+	```python
+	from gpiozero import CPUTemperature
+	```
+1. Then you can create a `cpu` object
 
-    ```python
-    temp = check_output(["vcgencmd", "measure_temp"])
-    ```
-
-1. Save and run the file (`Ctrl`+`S` + `F5`), calling the file `temp_monitor.py` when prompted. Then switch to the Python shell and type `temp` to check the variable's value. You should see something that looks like this:
-
-    ```python
-    >>> temp
-    b"temp=48.3'C\n"
-    >>> 
-    ```
-
-So you can see that the temperature is, in this case, `48.3` degrees Celsius. But what's that `b` doing at the start of the string?
-
-1. The `check_output` command returns a data type called a byte string. This is where each character is represented by a value between 0 and 255 in a large array. To see this as a string, it needs to be decoded. You can decode the `out` variable with an extra line of Python:
-
-    ```python
-    temp = temp.decode("UTF-8")
-    ```
-
-1. Now when you query `temp` in the Python shell, you should see something like this:
+	```python
+	cpu = CPUTemperature()
+	```
+1. Save and run this program (`ctrl + s` and `F5`) and then swap over into the **shell**. Here you can easily query the CPU temperature.
 
 ```python
->>> temp
-"temp=48.3'C\n"
->>> 
+>>> cpu.temperature
+32.552
 ```
-
-## Finding floats with regex
-
-Although you now have a string, it would be better to get the actual value out of the string. It's a decimal number, which is called a float in computer science. To get the float, you can use a handy concept called **regular expressions**. A regular expression, or **regex**, looks for patterns in strings. In this case we want to find a number, followed by a decimal point, followed by an additional number.
-
-1. First, you need to import the `findall` method from the `re` library. Add this line beneath your `subprocess` import:
-
-    ```python
-    from re import findall
-    ```
-
-1. You can start by just looking for a number. In regex, the characters `\d` searches for a number:
-
-    ```python
-    temp = findall("\d", temp)
-    ```
-
-1. Querying `temp` in the shell will now provide something like this:
-
-    ```python
-    >>> temp
-    ['4', '8', '3']
-    >>> 
-    ```
-
-1. You'll notice that the numbers have been placed in a list. Unfortunately, the `4` and the `8` have been split. You can resolve this by adding a `+` to the `d`; this regex will then search for numbers that are consecutive. Edit the line so it looks like this:
-
-    ```python
-    temp = findall("\d+", temp)
-    ```
-
-This should give you something like this:
-
-    ```python
-    >>> temp
-    ['48', '3']
-    >>> 
-    ```
-
-1. The number has still been split around the decimal point, though. The line can be edited to include a search for the decimal point, however:
-
-    ```python
-    temp = findall("\d+\.", temp)
-    ```
-
-1. Now querying `temp` in the shell gives this:
-
-    ```python
-    >>> temp
-    ['48.']
-    >>> 
-    ```
-
-1. The number after the decimal place is missing. One more change will give you the actual number:
-
-    ```python
-    temp = findall("\d+\.\d+", temp)
-    ```
-    
-Now you have this output:
-
-```python
->>> temp
-['48.3']
->>> 
-```
-
-## Getting the actual float
-
-You still have a problem: you don't actually have the float yet. What you have is something like `['48.3']`, which is actually a string inside a list.
-
-1. As the list has only a single element, you can get the 0th element easily by adding another line:
-
-    ```python
-    temp = temp[0]
-    ```
-
-1. Then, you just need to convert the string to a float:
-
-    ```python
-    temp = float(temp)
-    ```
-
-1. Your entire script should now look like this:
-
-    ```python
-    from subprocess import check_output
-    from re import findall
-
-    temp = check_output(["vcgencmd", "measure_temp"])
-    temp = temp.decode("UTF-8")
-    temp = findall("\d+\.\d+",temp)
-    temp = temp[0]
-    temp = float(temp)
-    ```
-
-1. You could condense this down into fewer lines, if you like:
-
-    ```python
-    from subprocess import check_output
-    from re import findall
-
-    temp = check_output(["vcgencmd", "measure_temp"]).decode("UTF-8")
-    temp = float(findall("\d+\.\d+",temp)[0])
-    ```
-
-1. However, you'll definitely want to place it all in a function:
-
-    ``` python
-    from subprocess import check_output
-    from re import findall
-
-    def get_temp():
-        temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
-        temp = float(findall("\d+\.\d+",temp)[0])
-        return(temp)
-    ```
-
-1. Now in the shell, after you've run the file, you can call the function:
-
-    ```python
-    >>> get_temp()
-    47.8
-    >>> 
-    ```
 
 ## Writing the data to a CSV file
 
-Although it's nice that you now have a function to find out the CPU temperature, it would be useful if that data could be stored somewhere. A CSV file (comma-separated values) is ideal for this, as it can be used by applications like Excel and LibreOffice.
+It would be useful if that data could be stored somewhere. A CSV file (comma-separated values) is ideal for this, as it can be used by applications like Excel and LibreOffice.
 
 1. You'll want to log the date and time while getting the CPU temperatures, so you'll need some extra libraries for this. Add this to your imports:
 
@@ -214,12 +54,12 @@ Although it's nice that you now have a function to find out the CPU temperature,
         while True:
     ```
 
-1. Inside the loop, you can use your `get_temp` function to get the temperature:
+1. Inside the loop, you can get the temperature and store it as a variable.
 
     ```python
     with open("cpu_temp.csv", "a") as log:
         while True:
-            temp = get_temp()
+            temp = cpu.temperature
     ```
 
 1. Now you want to write both the current date and time, plus the temperature, to the CSV file:
@@ -227,7 +67,7 @@ Although it's nice that you now have a function to find out the CPU temperature,
     ```python
     with open("cpu_temp.csv", "a") as log:
         while True:
-            temp = get_temp()
+            temp = cpu.temperature
             log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
     ```
 
@@ -247,18 +87,12 @@ Although it's nice that you now have a function to find out the CPU temperature,
 1. The entire script should now look like this:
 
     ```python
-    from subprocess import check_output
-    from re import findall
+	from gpiozero import CPUTemperature
     from time import sleep, strftime, time
-
-    def get_temp():
-        temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
-        temp = float(findall("\d+\.\d+",temp)[0])
-        return(temp)
 
     with open("cpu_temp.csv", "a") as log:
         while True:
-            temp = get_temp()
+            temp = cpu.temperature
             log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
             sleep(1)
     ```
@@ -273,7 +107,7 @@ You can produce a graph of CPU temperatures that will update as it's recorded. F
     import matplotlib.pyplot as plt
     ```
 
-1. The next three lines can go before your `get_temp()` definition. They tell `matplotlib` that you'll be doing interactive plotting, and also create the two lists that will hold the data to be plotted:
+1. The next three lines can go after your imports. They tell `matplotlib` that you'll be doing interactive plotting, and also create the two lists that will hold the data to be plotted:
 
     ```python
     plt.ion()
@@ -309,19 +143,15 @@ You can produce a graph of CPU temperatures that will update as it's recorded. F
 It might be useful to have this script running when the Raspberry Pi starts up. To do this, it's best to clean up the script a little, so that you can easily comment out the lines that draw the graph. Below is the same script tidied into functions, and with the graph-drawing line commented out:
 
 ```python
-from subprocess import check_output
-from re import findall
+from gpiozero import CPUTemperature
 from time import sleep, strftime, time
 import matplotlib.pyplot as plt
+
+cpu = CPUTemperature()
 
 plt.ion()
 x = []
 y = []
-
-def get_temp():
-    temp = check_output(["vcgencmd","measure_temp"]).decode("UTF-8")
-    temp = float(findall("\d+\.\d+",temp)[0])
-    return(temp)
 
 def write_temp(temp):
     with open("cpu_temp.csv", "a") as log:
@@ -336,7 +166,7 @@ def graph(temp):
     plt.draw()    
 
 while True:
-    temp = get_temp()
+    temp = cpu.temperature
     write_temp(temp)
 #    graph(temp)
     sleep(1)
@@ -353,7 +183,7 @@ while True:
 1. Scroll to the bottom of the file and add this single line:
 
     ```bash
-    @reboot python3 /home/pi/temp_monitor.py
+    @reboot python3.4 /home/pi/temp_monitor.py
     ```
 
     This assumes your script is called `temp_monitor.py` and it's saved in your home directory.
