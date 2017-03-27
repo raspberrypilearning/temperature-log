@@ -27,6 +27,7 @@ The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can
 32.552
 ```
 
+
 ## Writing the data to a CSV file
 
 It would be useful if that data could be stored somewhere. A CSV (comma-separated values) file is ideal for this, as it can be used by applications like Excel and LibreOffice.
