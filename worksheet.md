@@ -29,7 +29,7 @@ The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can
 
 ## Writing the data to a CSV file
 
-It would be useful if that data could be stored somewhere. A CSV file (comma-separated values) is ideal for this, as it can be used by applications like Excel and LibreOffice.
+It would be useful if that data could be stored somewhere. A CSV (comma-separated values) file is ideal for this, as it can be used by applications like Excel and LibreOffice.
 
 1. You'll want to log the date and time while getting the CPU temperatures, so you'll need some extra libraries for this. Add this to your imports:
 
@@ -101,13 +101,13 @@ It would be useful if that data could be stored somewhere. A CSV file (comma-sep
 
 You can produce a graph of CPU temperatures which will update as the data is recorded. For this, you'll need the **matplotlib** library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md).
 
-1. First of all, import the `matplotlib` library where your other imports are:
+1. First of all, import the matplotlib library where your other imports are:
 
     ```python
     import matplotlib.pyplot as plt
     ```
 
-1. The next three lines can go after your imports. They tell `matplotlib` that you'll be doing interactive plotting, and also create the two lists that will hold the data to be plotted:
+1. The next three lines can go after your imports. They tell matplotlib that you'll be doing interactive plotting, and also create the two lists that will hold the data to be plotted:
 
     ```python
     plt.ion()
@@ -173,9 +173,9 @@ while True:
 
 ```
 
-1. Automating scripts is simple with **crontab**. This is basically a file where commands can be placed that will run at certain times or after certain events. To begin, open up a terminal window (press **Ctrl**+**Alt**+**T**).
+1. Automating scripts is simple with **crontab**. This is basically a file where commands can be placed that will run at certain times or after certain events. To begin, open up a terminal window (press **Ctrl + Alt + T**).
 
-1. Now to edit the crontab you just type:
+1. To edit the crontab, you just type:
 
     ```bash
     crontab -e
@@ -186,15 +186,15 @@ while True:
     @reboot python3.4 /home/pi/temp_monitor.py
     ```
 
-    This assumes your script is called `temp_monitor.py` and it's saved in your home directory.
+    This assumes that your script is called `temp_monitor.py` and that it's saved in your home directory.
 
-1. Now reboot your Raspberry Pi. Give it a little time to run and then in in a terminal type:
+1. Now reboot your Raspberry Pi. Give it a little time to run, then type the following in a terminal window:
 
     ```bash
     cat cpu_temp.csv
     ```
 
-    to see the contents of the CSV file.
+    This will enable you to see the contents of the CSV file.
 
 1. If you want to see a graph, then just uncomment the `graph(temp)` line using IDLE and run the file.
 
