@@ -8,12 +8,13 @@ The BCM2835 system on a chip (SoC) of the Raspberry Pi has a temperature sensor 
 
 ### Hardware
 
-For accurate timestamps in your logs, you can optionally use a [Real Time Clock](http://www.modmypi.com/raspberry-pi/breakout-boards/raspberry-pi-%28official%29/piface-shim-rtc-real-time-clock/) accessory
+For accurate timestamps in your logs, you can use an optional [Real Time Clock](http://www.modmypi.com/raspberry-pi/breakout-boards/raspberry-pi-%28official%29/piface-shim-rtc-real-time-clock/) accessory
 
 ## Worksheet & included files
 
 - [The worksheet](worksheet.md)
-- (Optional) Final version of a shell script: [temp_monitor.sh](code/temperature_log.sh)
+
+- (Optional) There is also a shell script version of the temperature monitor, if you prefer using Bash: [temp_monitor.sh](code/temperature_log.sh)
     - Download to your Pi with `wget http://goo.gl/vV2SF5 -O temperature_log.sh --no-check-certificate`
 
 ## Licence
