@@ -6,21 +6,21 @@ The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can
 
 ## Creating a Python script to monitor temperature
 
-1. Open a new Python 3 shell by going to `Menu` > `Programming` > `Python 3 (IDLE)`.
+1. Open a new Python 3 shell by going to **Menu** > **Programming** > **Python 3 (IDLE)**.
 
-1. Now create a new Python script by clicking on `File` > `New File`.
+1. Now create a new Python script by clicking on **File** > **New File**.
 
-1. You can use the gpiozero module to find the CPU temperature. First you'll need to import the `CPUTemperature` class
+1. You can use the GPIO Zero module to find the CPU temperature. First you'll need to import the `CPUTemperature` class:
 
 	```python
 	from gpiozero import CPUTemperature
 	```
-1. Then you can create a `cpu` object
+1. Then you can create a `cpu` object:
 
 	```python
 	cpu = CPUTemperature()
 	```
-1. Save and run this program (`ctrl + s` and `F5`) and then swap over into the **shell**. Here you can easily query the CPU temperature.
+1. Save and run this program (press **Ctrl + S** and then **F5**) and then swap over into the shell. Here, you can easily query the CPU temperature.
 
 ```python
 >>> cpu.temperature
@@ -37,7 +37,7 @@ It would be useful if that data could be stored somewhere. A CSV file (comma-sep
     from time import sleep, strftime, time
     ```
 
-    These extra methods let you pause your program (`sleep`), get today's date as a string (`strftime`), and get the exact time in what's known as [**UNIX time**](https://en.wikipedia.org/wiki/Unix_time) (`time`).
+    These extra methods let you pause your program (`sleep`), get today's date as a string (`strftime`), and get the exact time in what's known as [UNIX time](https://en.wikipedia.org/wiki/Unix_time) (`time`).
 
 1. To write to a file, you first need to create it. At the end of your file, add the following line:
 
@@ -45,9 +45,9 @@ It would be useful if that data could be stored somewhere. A CSV file (comma-sep
     with open("cpu_temp.csv", "a") as log:
     ```
 
-    This creates a new file called `cpu_temp.csv` and opens it with the name `log`. It also opens it in *append* mode, so that lines are only written to the end of the file.
+    This creates a new file called `cpu_temp.csv` and opens it with the name `log`. It also opens it in **append** mode, so that lines are only written to the end of the file.
 
-1. Now, you'll need to start an infinite loop that will run until you kill the program with `Ctrl`+`C`:
+1. Now, you'll need to start an infinite loop that will run until you kill the program with **Ctrl + C**:
 
     ```python
     with open("cpu_temp.csv", "a") as log:
@@ -74,9 +74,9 @@ It would be useful if that data could be stored somewhere. A CSV file (comma-sep
 1. That line's a little complicated, so let's break it down a bit:
 
   - `log.write()` will write whatever string is in the brackets to the CSV file.
-  - `"{0},{1}\n"` is a string containing two placeholders separated by a comma, and ending in a newline.
+  - `"{0},{1}\n"` is a string containing two placeholders separated by a comma, and ending in a new line.
   - `strftime("%Y-%m-%d %H:%M:%S")` is inserted into the first placeholder. It's the current date and time as a string.
-  - `str(temp)` is the CPU temperature converted to a string, that's written into the second placeholder after the comma.
+  - `str(temp)` is the CPU temperature converted to a string, which is written into the second placeholder after the comma.
 
 1. Lastly, you can add a single line to the end of your file to pause the script between writes. Here it's pausing for one second, but you can use any interval that you want:
 
@@ -97,9 +97,9 @@ It would be useful if that data could be stored somewhere. A CSV file (comma-sep
             sleep(1)
     ```
 
-## Live graphing the data
+## Live-graphing the data
 
-You can produce a graph of CPU temperatures that will update as it's recorded. For this you'll need the `matplotlib` library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md).
+You can produce a graph of CPU temperatures which will update as the data is recorded. For this, you'll need the `matplotlib` library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md).
 
 1. First of all, import the `matplotlib` library where your other imports are:
 
@@ -173,7 +173,7 @@ while True:
 
 ```
 
-1. Automating scripts is simple with `crontab`. This is basically a file where commands can be placed that will run at certain times or after certain events. To begin, open up a terminal (`Ctrl`+`Alt`+`T`).
+1. Automating scripts is simple with **crontab**. This is basically a file where commands can be placed that will run at certain times or after certain events. To begin, open up a terminal window (press **Ctrl**+**Alt**+**T**).
 
 1. Now to edit the crontab you just type:
 
@@ -200,6 +200,6 @@ while True:
 
 ## What next?
 
-- If you want to play around more with `matplotlib`, you can have a look at the [Visualising Sorting with Python](https://www.raspberrypi.org/learning/visualising-sorting-with-python/) lessons on the Raspberry Pi website.
+- If you want to play around more with matplotlib, you can have a look at the [Visualising Sorting with Python](https://www.raspberrypi.org/learning/visualising-sorting-with-python/) lessons on the Raspberry Pi website.
 - Why not have a look at the [Getting Started with the Twitter API](https://www.raspberrypi.org/learning/getting-started-with-the-twitter-api/) resource, and have your Raspberry Pi tweet you when the CPU temperature gets too high?
 
