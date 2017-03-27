@@ -1,6 +1,6 @@
 # Temperature Log
 
-The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can be used to measure its temperature from the command line. It can provide information on how much heat the chip has generated during operation, and also report on the temperature of the environment. This project's aim is to create a simple script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals, and write them into log files that can be viewed later.
+The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can be used to measure its temperature from the command line. It can provide information on how much heat the chip has generated during operation, and can also report on the temperature of the environment. This project's aim is to create a simple script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals, and write them into log files that can be viewed later.
 
 ![](images/bcm2835.jpg)
 
@@ -99,7 +99,7 @@ It would be useful if that data could be stored somewhere. A CSV file (comma-sep
 
 ## Live-graphing the data
 
-You can produce a graph of CPU temperatures which will update as the data is recorded. For this, you'll need the `matplotlib` library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md).
+You can produce a graph of CPU temperatures which will update as the data is recorded. For this, you'll need the **matplotlib** library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md).
 
 1. First of all, import the `matplotlib` library where your other imports are:
 
