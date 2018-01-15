@@ -1,6 +1,6 @@
-title: Temperature Log
+title: Temperature log
 hero_image: images/banner.png
-description: Take temperature measurements from the Raspberry Pi's CPU at given intervals and log the data
+description: Measure the temperature with your Raspberry Pi, and log the data
 original_url: https://raspberrypi.org/learning/temperature-log
 theme: red
 duration: 2
@@ -14,7 +14,7 @@ site_areas: ''
 steps:
 - title: Introduction
 - title: What you will need
-- title: Temperature Log
+- title: Temperature log
 - title: Creating a Python script to monitor temperature
 - title: Writing the data to a CSV file
 - title: Live-graphing the data
