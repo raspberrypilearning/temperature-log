@@ -2,7 +2,7 @@ title: Temperature log
 hero_image: images/banner.png
 description: Measure the temperature with your Raspberry Pi, and log the data
 original_url: https://raspberrypi.org/learning/temperature-log
-theme: red
+theme: turquoise
 duration: 2
 listed: true
 ingredient: false
