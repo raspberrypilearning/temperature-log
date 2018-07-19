@@ -13,7 +13,7 @@ It would be useful if that data could be stored somewhere. A CSV (comma-separate
 - To write to a file, you first need to create it. At the end of your file, add the following line:
 
     ```python
-    with open("cpu_temp.csv", "a") as log:
+    with open("/home/pi/cpu_temp.csv", "a") as log:
     ```
 
     This creates a new file called `cpu_temp.csv` and opens it with the name `log`. It also opens it in **append** mode, so that lines are only written to the end of the file.
