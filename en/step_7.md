@@ -14,7 +14,7 @@ x = []
 y = []
 
 def write_temp(temp):
-    with open("cpu_temp.csv", "a") as log:
+    with open("/home/pi/cpu_temp.csv", "a") as log:
         log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
 
 def graph(temp):
@@ -43,7 +43,7 @@ while True:
 - Scroll to the bottom of the file and add this single line:
 
     ```bash
-    @reboot python3.4 /home/pi/temp_monitor.py
+    @reboot python3 /home/pi/temp_monitor.py
     ```
 
     This assumes that your script is called `temp_monitor.py` and that it's saved in your home directory.

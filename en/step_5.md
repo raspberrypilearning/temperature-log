@@ -13,7 +13,7 @@ It would be useful if that data could be stored somewhere. A CSV (comma-separate
 - To write to a file, you first need to create it. At the end of your file, add the following line:
 
     ```python
-    with open("cpu_temp.csv", "a") as log:
+    with open("/home/pi/cpu_temp.csv", "a") as log:
     ```
 
     This creates a new file called `cpu_temp.csv` and opens it with the name `log`. It also opens it in **append** mode, so that lines are only written to the end of the file.
@@ -21,14 +21,14 @@ It would be useful if that data could be stored somewhere. A CSV (comma-separate
 - Now, you'll need to start an infinite loop that will run until you kill the program with **Ctrl + C**:
 
     ```python
-    with open("cpu_temp.csv", "a") as log:
+    with open("/home/pi/cpu_temp.csv", "a") as log:
         while True:
     ```
 
 - Inside the loop, you can get the temperature and store it as a variable.
 
     ```python
-    with open("cpu_temp.csv", "a") as log:
+    with open("/home/pi/cpu_temp.csv", "a") as log:
         while True:
             temp = cpu.temperature
     ```
@@ -36,7 +36,7 @@ It would be useful if that data could be stored somewhere. A CSV (comma-separate
 - Now you want to write both the current date and time, plus the temperature, to the CSV file:
 
     ```python
-    with open("cpu_temp.csv", "a") as log:
+    with open("/home/pi/cpu_temp.csv", "a") as log:
         while True:
             temp = cpu.temperature
             log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
@@ -58,10 +58,10 @@ It would be useful if that data could be stored somewhere. A CSV (comma-separate
 - The entire script should now look like this:
 
     ```python
-	from gpiozero import CPUTemperature
+    from gpiozero import CPUTemperature
     from time import sleep, strftime, time
 
-    with open("cpu_temp.csv", "a") as log:
+    with open("/home/pi/cpu_temp.csv", "a") as log:
         while True:
             temp = cpu.temperature
             log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
