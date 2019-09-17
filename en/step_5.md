@@ -1,70 +1,74 @@
-## Writing the data to a CSV file
+## Automating the script
 
-It would be useful if that data could be stored somewhere. A CSV (comma-separated values) file is ideal for this, as it can be used by applications like Excel and LibreOffice.
+It might be useful to have this script running when the Raspberry Pi starts up. To do this, it's best to clean up the script a little, so that you can easily comment out the lines that draw the graph. Below is the same script tidied into functions, and with the graph-drawing line commented out:
 
-- You'll want to log the date and time while getting the CPU temperatures, so you'll need some extra libraries for this. Add this to your imports:
+```python
+from gpiozero import CPUTemperature
+from time import sleep, strftime, time
+import matplotlib.pyplot as plt
 
-    ```python
-    from time import sleep, strftime, time
-    ```
+cpu = CPUTemperature()
 
-    These extra methods let you pause your program (`sleep`), get today's date as a string (`strftime`), and get the exact time in what's known as [UNIX time](https://en.wikipedia.org/wiki/Unix_time) (`time`).
+plt.ion()
+x = []
+y = []
 
-- To write to a file, you first need to create it. At the end of your file, add the following line:
-
-    ```python
+def write_temp(temp):
     with open("/home/pi/cpu_temp.csv", "a") as log:
-    ```
+        log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
 
-    This creates a new file called `cpu_temp.csv` and opens it with the name `log`. It also opens it in **append** mode, so that lines are only written to the end of the file.
+def graph(temp):
+    y.append(temp)
+    x.append(time())
+    plt.clf()
+    plt.scatter(x,y)
+    plt.plot(x,y)
+    plt.draw()    
 
-- Now, you'll need to start an infinite loop that will run until you kill the program with **Ctrl + C**:
+while True:
+    temp = cpu.temperature
+    write_temp(temp)
+#    graph(temp)
+    plt.pause(1)
 
-    ```python
-    with open("/home/pi/cpu_temp.csv", "a") as log:
-        while True:
-    ```
+```
 
-- Inside the loop, you can get the temperature and store it as a variable.
+--- task ---
+Automating scripts is simple with **crontab**. This is basically a file where commands can be placed that will run at certain times or after certain events. To begin, open up a terminal window (press **Ctrl + Alt + T**).
+--- /task ---
 
-    ```python
-    with open("/home/pi/cpu_temp.csv", "a") as log:
-        while True:
-            temp = cpu.temperature
-    ```
+--- task ---
+To edit the crontab, you just type:
 
-- Now you want to write both the current date and time, plus the temperature, to the CSV file:
+```bash
+crontab -e
+```
 
-    ```python
-    with open("/home/pi/cpu_temp.csv", "a") as log:
-        while True:
-            temp = cpu.temperature
-            log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
-    ```
+If asked, choose `nano` as your editor.
+--- /task ---
 
-- That line's a little complicated, so let's break it down a bit:
 
-  - `log.write()` will write whatever string is in the brackets to the CSV file.
-  - `"{0},{1}\n"` is a string containing two placeholders separated by a comma, and ending in a new line.
-  - `strftime("%Y-%m-%d %H:%M:%S")` is inserted into the first placeholder. It's the current date and time as a string.
-  - `str(temp)` is the CPU temperature converted to a string, which is written into the second placeholder after the comma.
+--- task ---
+Scroll to the bottom of the file and add this single line:
 
-- Lastly, you can add a single line to the end of your file to pause the script between writes. Here it's pausing for one second, but you can use any interval that you want:
+```bash
+@reboot python3 /home/pi/temp_monitor.py
+```
 
-    ```python
-    sleep(1)
-    ```
+This assumes that your script is called `temp_monitor.py` and that it's saved in your home directory.
+--- /task ---
 
-- The entire script should now look like this:
+--- task ---
+Now reboot your Raspberry Pi. Give it a little time to run, then type the following in a terminal window:
 
-    ```python
-    from gpiozero import CPUTemperature
-    from time import sleep, strftime, time
+```bash
+cat cpu_temp.csv
+```
 
-    with open("/home/pi/cpu_temp.csv", "a") as log:
-        while True:
-            temp = cpu.temperature
-            log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
-            sleep(1)
-    ```
+This will enable you to see the contents of the CSV file.
+--- /task ---
+
+--- task ---
+If you want to see a graph, then just uncomment the `graph(temp)` line using Mu and run the file.
+--- /task ---
 

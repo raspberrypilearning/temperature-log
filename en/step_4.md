@@ -1,24 +1,54 @@
-## Creating a Python script to monitor temperature
+## Live-graphing the data
 
-- Open a new Python 3 shell by going to **Menu** > **Programming** > **Python 3 (IDLE)**.
+You can produce a graph of CPU temperatures which will update as the data is recorded. For this, you'll need the **matplotlib** library. The instructions for installing this are [here](https://github.com/raspberrypilearning/temperature-log/blob/master/software.md).
 
-- Now create a new Python script by clicking on **File** > **New File**.
-
-- You can use the GPIO Zero module to find the CPU temperature. First you'll need to import the `CPUTemperature` class:
-
-	```python
-	from gpiozero import CPUTemperature
-	```
-- Then you can create a `cpu` object:
-
-	```python
-	cpu = CPUTemperature()
-	```
-- Save and run this program (press **Ctrl + S** and then **F5**) and then swap over into the shell. Here, you can easily query the CPU temperature.
+--- task ---
+First of all, import the matplotlib library where your other imports are:
 
 ```python
->>> cpu.temperature
-32.552
-```
+import matplotlib.pyplot as plt
+	```
+	--- /task ---
 
+--- task ---
+The next three lines can go after your imports. They tell matplotlib that you'll be doing interactive plotting, and also create the two lists that will hold the data to be plotted:
+
+```python
+plt.ion()
+x = []
+y = []
+```
+--- /task ---
+
+--- task ---
+The next lines all go into your `while True` loop, before the CSV is written, but after the `temp = get_temp()` line. Firstly, you add the current temperature to the end of the `y` list, and the time to the end of the `x` list:
+
+```python
+y.append(temp)
+x.append(time())
+```
+--- /task ---
+
+--- task ---
+Next, the plot needs to be cleared, and then the points and lines calculated:
+
+```python
+plt.clf()
+plt.scatter(x,y)
+plt.plot(x,y)
+```
+--- /task ---
+
+--- task ---
+Lastly, the graphing can be paused for a second and then plot can be drawn. Remove the `sleep` function and use `plt.pause` instead:
+
+```python
+plt.pause(1)
+plt.draw()
+```
+--- /task ---
+
+--- task ---
+Run your program and you should see the graph being interactively drawn. Open up some programs, such as Minecraft or Mathematica, and watch the CPU temperature increase.
+--- /task ---
 
