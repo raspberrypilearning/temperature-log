@@ -1,6 +1,82 @@
-## Temperature log
+## Writing the data to a CSV file
 
-The system on a chip (SoC) of the Raspberry Pi has a temperature sensor that can be used to measure its temperature from the command line. It can provide information on how much heat the chip has generated during operation, and can also report on the temperature of the environment. This project's aim is to create a simple script that can run automatically as you boot up your Raspberry Pi, take measurements from the temperature sensor at given intervals, and write them into log files that can be viewed later.
+It would be useful if that data could be stored somewhere. A CSV (comma-separated values) file is ideal for this, as it can be used by applications like Excel and LibreOffice.
 
-![](images/bcm2835.jpg)
+--- task ---
+You'll want to log the date and time while getting the CPU temperatures, so you'll need some extra libraries for this. Add this to your imports:
+
+```python
+from time import sleep, strftime, time
+```
+--- /task ---
+
+These extra methods let you pause your program (`sleep`), get today's date as a string (`strftime`), and get the exact time in what's known as [UNIX time](https://en.wikipedia.org/wiki/Unix_time) (`time`).
+
+--- task ---
+To write to a file, you first need to create it. At the end of your program, add the following line:
+
+```python
+with open("/home/pi/cpu_temp.csv", "a") as log:
+```
+--- /task ---
+
+This creates a new file called `cpu_temp.csv` and opens it with the name `log`. It also opens it in **append** mode, so that lines are only written to the end of the file.
+
+--- task ---
+Now, you'll need to start an infinite loop that will run until you kill the program with **Ctrl + C**:
+
+```python
+with open("/home/pi/cpu_temp.csv", "a") as log:
+	while True:
+```
+--- /task ---
+
+--- task ---
+Inside the loop, you can get the temperature and store it as a variable.
+
+```python
+with open("/home/pi/cpu_temp.csv", "a") as log:
+	while True:
+		temp = cpu.temperature
+```
+--- /task ---
+
+--- task ---
+Now you want to write both the current date and time, plus the temperature, to the CSV file:
+
+```python
+with open("/home/pi/cpu_temp.csv", "a") as log:
+	while True:
+		temp = cpu.temperature
+		log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
+```
+--- /task ---
+
+That line's a little complicated, so let's break it down a bit:
+
+- `log.write()` will write whatever string is in the brackets to the CSV file.
+- `"{0},{1}\n"` is a string containing two placeholders separated by a comma, and ending in a new line.
+- `strftime("%Y-%m-%d %H:%M:%S")` is inserted into the first placeholder. It's the current date and time as a string.
+- `str(temp)` is the CPU temperature converted to a string, which is written into the second placeholder after the comma.
+
+--- task ---
+Lastly, you can add a single line to the end of your file to pause the script between writes. Here it's pausing for one second, but you can use any interval that you want:
+
+```python
+sleep(1)
+```
+
+The entire script should now look like this:
+
+```python
+from gpiozero import CPUTemperature
+from time import sleep, strftime, time
+
+with open("/home/pi/cpu_temp.csv", "a") as log:
+	while True:
+		temp = cpu.temperature
+		log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
+		sleep(1)
+```
+--- /task ---
 
