@@ -26,7 +26,7 @@ Save and run this program, and then in the shell at the bottom of the Mu window,
 ```python
 >>> cpu.temperature
 63.783
-``
+```
 --- /task ---
 
 
