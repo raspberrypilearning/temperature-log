@@ -46,7 +46,7 @@ title: Additional information for educators
 ---
 If you need to print this project, please use the [printer-friendly version](https://projects.raspberrypi.org/en/projects/temperature-log/print){:target="_blank"}.
 
-You can find the [completed project here](http://rpf.io/p/en/temperature-log){:target="_blank"}.
+You can find the [completed project here](http://rpf.io/p/en/temperature-log-get){:target="_blank"}.
 --- /collapse ---
 
 
