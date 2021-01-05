@@ -72,6 +72,8 @@ The entire script should now look like this:
 from gpiozero import CPUTemperature
 from time import sleep, strftime, time
 
+cpu = CPUTemperature()
+
 with open("/home/pi/cpu_temp.csv", "a") as log:
 	while True:
 		temp = cpu.temperature
