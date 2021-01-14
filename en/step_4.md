@@ -5,7 +5,7 @@ You can produce a graph of CPU temperatures which will update as the data is rec
 --- task ---
 First of all, import the matplotlib library where your other imports are:
 
-```python
+```
 import matplotlib.pyplot as plt
 	```
 	--- /task ---
@@ -21,7 +21,7 @@ y = []
 --- /task ---
 
 --- task ---
-The next lines all go into your `while True` loop, before the CSV is written, but after the `temp = get_temp()` line. Firstly, you add the current temperature to the end of the `y` list, and the time to the end of the `x` list:
+The next lines all go into your `while True` loop, before the CSV is written, but after the `temp = cpu.temperature` line. Firstly, you add the current temperature to the end of the `y` list, and the time to the end of the `x` list:
 
 ```python
 y.append(temp)
