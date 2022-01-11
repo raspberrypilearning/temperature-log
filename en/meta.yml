@@ -1,3 +1,4 @@
+---
 title: Temperature log
 hero_image: images/banner.png
 description: Measure the temperature with your Raspberry Pi, and log the data
@@ -15,10 +16,12 @@ hardware: raspberry-pi, electronic-components
 software: python
 version: 4
 last_tested: 2019-09-17
-steps: 
+steps:
 - title: Introduction
+  completion: engaged
 - title: Creating a Python script to monitor temperature
 - title: Writing the data to a CSV file
 - title: Live-graphing the data
+  completion: internal
 - title: Automating the script
 - title: What next?
