@@ -13,10 +13,10 @@ from time import sleep, strftime, time
 These extra methods let you pause your program (`sleep`), get today's date as a string (`strftime`), and get the exact time in what's known as [UNIX time](https://en.wikipedia.org/wiki/Unix_time) (`time`).
 
 --- task ---
-To write to a file, you first need to create it. At the end of your program, add the following line:
+To write to a file, you first need to create it. At the end of your program, add the following line, but change `username` to the username you use:
 
 ```python
-with open("/home/pi/cpu_temp.csv", "a") as log:
+with open("/home/username/cpu_temp.csv", "a") as log:
 ```
 --- /task ---
 
@@ -26,7 +26,7 @@ This creates a new file called `cpu_temp.csv` and opens it with the name `log`. 
 Now, you'll need to start an infinite loop that will run until you kill the program with **Ctrl + C**:
 
 ```python
-with open("/home/pi/cpu_temp.csv", "a") as log:
+with open("/home/username/cpu_temp.csv", "a") as log:
 	while True:
 ```
 --- /task ---
@@ -35,7 +35,7 @@ with open("/home/pi/cpu_temp.csv", "a") as log:
 Inside the loop, you can get the temperature and store it as a variable.
 
 ```python
-with open("/home/pi/cpu_temp.csv", "a") as log:
+with open("/home/username/cpu_temp.csv", "a") as log:
 	while True:
 		temp = cpu.temperature
 ```
@@ -45,7 +45,7 @@ with open("/home/pi/cpu_temp.csv", "a") as log:
 Now you want to write both the current date and time, plus the temperature, to the CSV file:
 
 ```python
-with open("/home/pi/cpu_temp.csv", "a") as log:
+with open("/home/username/cpu_temp.csv", "a") as log:
 	while True:
 		temp = cpu.temperature
 		log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
@@ -74,7 +74,7 @@ from time import sleep, strftime, time
 
 cpu = CPUTemperature()
 
-with open("/home/pi/cpu_temp.csv", "a") as log:
+with open("/home/username/cpu_temp.csv", "a") as log:
 	while True:
 		temp = cpu.temperature
 		log.write("{0},{1}\n".format(strftime("%Y-%m-%d %H:%M:%S"),str(temp)))
