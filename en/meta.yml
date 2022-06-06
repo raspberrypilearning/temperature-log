@@ -18,10 +18,12 @@ version: 4
 last_tested: 2019-09-17
 steps:
 - title: Introduction
-  completion: engaged
 - title: Creating a Python script to monitor temperature
 - title: Writing the data to a CSV file
+  completion:
+  - engaged
 - title: Live-graphing the data
-  completion: internal
 - title: Automating the script
+  completion:
+  - internal
 - title: What next?
